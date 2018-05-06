@@ -5,7 +5,6 @@
 	<title>易到大数据平台</title>
 	<link rel="stylesheet" type="text/css" href="css/base.css"/>
 	<link rel="stylesheet" type="text/css" href="css/home.css"/>
-	<link rel="stylesheet" type="text/css" href="css/bmap.css"/>
 	<script type="text/javascript">
 		document.getElementsByTagName('html')[0].style.fontSize = document.documentElement.clientWidth/14.4 +'px';
 	</script>
@@ -14,42 +13,42 @@
 	<div class="home">
 		<div class="home-container">
 			<section class="header-container">
-				<div class="logo-container">
+				<div class="header-left-container">
 					<span class="logo-png"></span>
 					<span class="header-text">易到大数据平台</span>
 				</div>
-				<div class="time-container">2018年5月8日  18:31</div>	
+				<div class="time-container" id="time-show"></div>	
 			</section>
 			<section class="left-container">
 				<div class="data-list-group">
 					<ul class="data-list">
 						<li class="data-item">
 							<div class="data-head">平台创建订单量</div>
-							<div class="data-body"><span class="data-number">25173</span>单</div>
+							<div class="data-body"><span id="create-order" class="data-number">25173</span>单</div>
 						</li>
 						<li class="data-item">
 							<div class="data-head">平台当前服务量</div>
-							<div class="data-body"><span class="data-number">567676</span>单</div>
+							<div class="data-body"><span id="current-service" class="data-number">567676</span>单</div>
 						</li>
 					</ul>
 					<ul class="data-list">
 						<li class="data-item">
-							<div class="data-head">平台创建订单量</div>
-							<div class="data-body"><span class="data-number">232354</span>单</div>
+							<div class="data-head">平台当前里程数</div>
+							<div class="data-body"><span id="current-mileage" class="data-number">232354</span>单</div>
 						</li>
 						<li class="data-item">
 							<div class="data-head">平台服务时长</div>
-							<div class="data-body"><span class="data-number">6878</span>单</div>
+							<div class="data-body"><span id="service-duration" class="data-number">6878</span>单</div>
 						</li>
 					</ul>
 					<ul class="data-list">
 						<li class="data-item">
 							<div class="data-head">平台需求量</div>
-							<div class="data-body"><span class="data-number">46344</span>单</div>
+							<div class="data-body"><span id="quantity-demand" class="data-number">46344</span>单</div>
 						</li>
 						<li class="data-item">
 							<div class="data-head">平台当前运力</div>
-							<div class="data-body"><span class="data-number">2345</span>单</div>
+							<div class="data-body"><span id="current-transport" class="data-number">2345</span>单</div>
 						</li>
 					</ul>
 				</div>
@@ -62,28 +61,42 @@
 			</section>
 			
 			<section class="right-container">
-				<section class="right-top-container">
-					<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-    				<div class="echart-box" id="yunli"></div>
+				<section class="right-cell-container right-top-container">
+					<span class="corner tl"></span>
+					<span class="corner tr"></span>
+					<span class="corner bl"></span>
+					<span class="corner br"></span>
+    					<div class="echart-box" id="yunli"></div>
 				</section>
-				<section class="right-middle-container">
+				<section class="right-cell-container right-middle-container">
+					<span class="corner tl"></span>
+					<span class="corner tr"></span>
+					<span class="corner bl"></span>
+					<span class="corner br"></span>
 					<div class="echart-box" id="fuwu"></div>
 				</section>
-				<section class="right-bottom-container">
+				<section class="right-cell-container right-bottom-container">
+					<span class="corner tl"></span>
+					<span class="corner tr"></span>
+					<span class="corner bl"></span>
+					<span class="corner br"></span>
 					<div class="echart-box" id="gongxu"></div>
 				</section>
 			</section>
 		</div>
 	</div>
 	
-	<!--<script src="lib/flexible.js"></script>-->
 	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=1XjLLEhZhQNUzd93EjU5nOGQ"></script>
     <!--<script src="http://mapv.baidu.com/build/mapv.min.js"></script>-->
     <script src="lib/mapv.js"></script>
     <!-- 引入 ECharts 文件 -->
 	<script src="https://cdn.bootcss.com/echarts/4.0.4/echarts-en.common.js"></script>
+	<script src="lib/countup.js"></script>
+	<script src="js/common.js"></script>
 	<script src="js/home.js"></script>
+	<script src="js/home-chart.js"></script>
+	<script src="js/home-map.js"></script>
 	
 </body>
 </html>

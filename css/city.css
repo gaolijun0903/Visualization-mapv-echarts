@@ -1,0 +1,215 @@
+.city,.city-container{
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background:#044161;
+}
+
+.header-container{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 0.72rem;
+	padding-top: 0.33rem;
+	z-index: 10;
+	/*border: 1px solid deepskyblue;*/
+}
+.header-container .header-left-container{
+	position: absolute;
+	top: 0.33rem;
+	left: 0.5rem;
+	width: 3.00rem;
+	height: 100%;
+	display: flex;
+}
+.header-container .header-left-container .back-png{
+	margin-right: 0.18rem;
+	width: 0.4rem;
+	height: 0.4rem;
+	background-image: url(../img/back.png);
+	background-size:100% 100%;
+}
+.header-container .header-left-container .header-text{
+	flex: 1;
+	font-size: 0.3rem;
+	line-height: 0.4rem;
+	color: #FFFFFF;
+	letter-spacing: 0;
+}
+.header-container .time-container{
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	font-size: 0.28rem;
+	line-height: 0.37rem;
+	color: #FFFFFF;
+	letter-spacing: 0;
+}
+
+.center-container{
+	width: 100%;
+	height: 100%;
+	/*border: 1px solid deepskyblue;*/
+}
+.center-container #map{
+	width: 100%;
+	height: 100%;
+}
+
+
+.left-container{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 2.5rem;
+	height: 100%;
+	padding: 1.27rem 0 1.27rem 0.5rem;
+	z-index: 1;
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0.75), rgba(0, 0, 0, 0));
+	background: -moz-linear-gradient(left, rgba(0,0,0,0.75), rgba(0, 0, 0, 0));
+	background: -o-linear-gradient(left, rgba(0,0,0,0.75), rgba(0, 0, 0, 0));
+	/*border: 1px solid deepskyblue;*/
+}
+.left-container .data-list-group{
+	height: 100%;
+	display: flex;
+	flex-direction:column;
+	justify-content:space-around;
+}
+.left-container .data-list-group .data-list{
+	/*flex:1;*/
+	height: 1.8rem;
+	display: flex;
+	flex-direction:column;
+}
+.left-container .data-list .data-item{
+	flex:1;
+}
+.left-container .data-list .data-item .data-head{
+	margin-bottom: 0.05rem;
+	font-size: 0.18rem;
+	line-height: 0.24rem;
+	color: #0FD9F8;
+	letter-spacing: 0;
+}
+.left-container .data-list .data-item .data-body{
+	font-size: 0.18rem;
+	line-height: 0.47rem;
+	color: #FFFFFF;
+	letter-spacing: 0;
+}
+.left-container .data-list .data-item .data-body .data-number{
+	font-size: 0.36rem;
+}
+
+
+
+
+.right-container{
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 3.4rem;
+	height: 100%;
+	z-index: 10;
+	/*border: 1px solid deepskyblue;*/
+}
+.right-container .right-cell-container {
+	width: 3.2rem;
+	padding: 0.16rem;
+	background:rgba(6,6,6,0.4);
+	border: 1px solid rgba(15,217,248,0.80);
+	position: relative;
+}
+.right-container .right-top-container{
+	margin: 0.33rem 0 0 -1.2rem;
+    padding: 0;
+    width: 4.4rem;
+    /*height: 0.80rem;*/
+}
+.right-container .right-middle-container{
+	margin-top: 0.31rem ;
+	height: 3.0rem;
+}
+.right-container .right-bottom-container{
+	margin-top: 0.12rem ;
+	height: 2.4rem;
+}
+.right-container .echart-box{
+	width: 100%;
+	height: 100%;
+}
+.right-container .corner{
+	position: absolute;
+	display: inline-block;
+	width: 0.2rem;
+	height: 0.2rem;
+}
+.right-container .corner.tl{
+	top: 0;
+	left: 0;
+	background-image:url(../img/corner-tl.png);
+	background-size: 100% 100%;
+}
+.right-container .corner.tr{
+	top: 0;
+	right: 0;
+	background-image:url(../img/corner-tr.png);
+	background-size: 100% 100%;
+}
+.right-container .corner.bl{
+	bottom: 0;
+	left: 0;
+	background-image:url(../img/corner-bl.png);
+	background-size: 100% 100%;
+}
+.right-container .corner.br{
+	bottom: 0;
+	right: 0;
+	background-image:url(../img/corner-br.png);
+	background-size: 100% 100%;
+}
+
+.right-container .echart-box .tab-list {
+	width: 100%;
+	height: 0.46rem;
+	padding: 0 0.4rem;
+	display: flex;
+}
+.right-container .echart-box .tab-list .tab-item{
+	flex: 1;
+	font-size: 0.16rem;
+	color: #0FD9F8;
+	letter-spacing: 0;
+}
+.right-container .echart-box .tab-list .tab-item .tab-item-inner{
+	display: inline-block;
+	height: 0.46rem;
+	line-height: 0.5rem;
+	margin: 0 auto;
+	border-bottom: 0.04rem solid transparent;
+}
+.right-container .echart-box .tab-list .tab-item.tab-item-active .tab-item-inner{
+	border-bottom: 0.04rem solid #FFFFFF;
+	color: #FFFFFF;
+}
+.right-container .echart-box .subtab-list {
+	padding: 0 0.4rem;
+	width: 100%;
+	height: 0.4rem;
+	display: none;
+}
+.right-container .echart-box #subtab-list-xingyun{
+	display: block;
+}
+.right-container .echart-box .subtab-list .subtab-item{
+	display: inline-block;
+	margin-right: 0.2rem;
+	font-size: 0.16rem;
+	line-height: 0.4rem;
+	color: #5F8B9E;
+	letter-spacing: 0;
+}
+
+
