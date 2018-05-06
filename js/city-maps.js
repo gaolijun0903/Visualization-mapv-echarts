@@ -1,11 +1,20 @@
+var layerTag = {
+	'XINGYUN': 'xingyun',
+	'YUNLI': 'yunli',
+	'GONGXU': 'gongxu',
+	'LUJING': 'lujing'
+}
 var CityMaps = {
 	map: null,
-	mapTags:[],
-	init: function(){
+	mapLayers:[],
+	shortcity: '',
+	layerTag: layerTag.XINGYUN,
+	init: function(shortcity){
+		this.shortcity = shortcity;
 		this.map = new BMap.Map("map", {
 		    enableMapClick: false
 		});
-		this.map.centerAndZoom(new BMap.Point(114.321317, 30.598428), 12);  // 初始化地图,设置中心点坐标和地图级别
+		this.map.centerAndZoom(new BMap.Point(114.321317, 30.598428), 8);  // 初始化地图,设置中心点坐标和地图级别
 		this.map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
 		this.map.setMapStyle({
 		    styleJson: [{
@@ -145,98 +154,58 @@ var CityMaps = {
 		        }
 		    }]
 		});
+		this.initLayers();
+		this.initLayerData();
+	},
+	initLayers: function(){
+		var layer1 = this.getOneLayer();   // 层1
+		var layer2 = this.getTwoLayer(); 	  // 层2
+		this.mapLayers.push(layer1);
+		this.mapLayers.push(layer2);
+	},
+	initLayerData: function(){
+		var self = this;
+		setTimeout(function(){
+			var randomCount = 1000;
+	        var data = [];
+	        var citys = ["北京","天津","上海","重庆","石家庄","太原","呼和浩特","哈尔滨","长春","沈阳","济南","南京","合肥","杭州","南昌","福州","郑州","武汉","长沙","广州","南宁","西安","银川","兰州","西宁","乌鲁木齐","成都","贵阳","昆明","拉萨","海口"];
+	        // 构造数据
+	        while (randomCount--) {
+	            var cityCenter = mapv.utilCityCenter.getCenterByCityName(citys[parseInt(Math.random() * citys.length)]);
+	            data.push({
+	                geometry: {
+	                    type: 'Point',
+	                    coordinates: [cityCenter.lng - 2 + Math.random() * 4, cityCenter.lat - 2 + Math.random() * 4]
+	                },
+	                count: 30 * Math.random(),
+	                time: 100 * Math.random()
+	            });
+	        };
+	        // 初始化第一个层的数据
+	        self.mapLayers[0].dataSet.set(data);
+	        // 更新options
+	        self.mapLayers[0].mapvLayer.update({
+				options: {
+					fillStyle: 'rgba(55, 50, 250, 0.2)',
+		            globalCompositeOperation: "lighter",
+		            size: 15,
+		            animation: {
+		                type: 'time',
+		                stepsRange: {
+		                    start: 0,
+		                    end: 100
+		                },
+		                trails: 10,
+		                duration: 5,
+		            },
+		            draw: 'simple'
+				}
+			});
+		},1000); 
 		
-		this.initData();
-	},
-	getXingyunApi: function(short){
-		$.get('static/car.csv', function(csvstr) {
-	        var options = {
-	            strokeStyle: 'rgba(50, 50, 255, 0.8)',
-	            lineWidth: 0.05,
-	            globalCompositeOperation: 'lighter',
-	            draw: 'simple'
-	        }
-	
-	        var dataSet = mapv.csv.getDataSet(csvstr);
-	
-	        var mapvLayer = new mapv.baiduMapLayer(map, dataSet, options);
-	
-	    });
-	},
-	getYunliApi: function(short){
-		$.get('static/wuhan-car.js', function (rs) {
-
-            var data = [];
-            var timeData = [];
-
-            rs = rs.split("\n");
-            console.log(rs.length);
-            var maxLength = 0;
-            for (var i = 0; i < rs.length; i++) {
-                var item = rs[i].split(',');
-                var coordinates = [];
-                if (item.length > maxLength) {
-                    maxLength = item.length;
-                }
-                for (j = 0; j < item.length; j += 2) {
-                    coordinates.push([item[j], item[j + 1]]);
-                    timeData.push({
-                        geometry: {
-                            type: 'Point',
-                            coordinates: [item[j], item[j + 1]]
-                        },
-                        count: 1,
-                        time: j
-                    });
-                }
-                data.push({
-                    geometry: {
-                        type: 'LineString',
-                        coordinates: coordinates
-                    }
-                });
-                
-            }
-
-            var dataSetLineString = new mapv.DataSet(data);
-
-            var optionsLineString = {
-                strokeStyle: 'rgba(53,57,255,0.5)',
-                coordType: 'bd09mc',
-                // globalCompositeOperation: 'lighter',
-                shadowColor: 'rgba(53,57,255,0.2)',
-                shadowBlur: 3,
-                lineWidth: 3.0,
-                draw: 'simple'
-            }
-
-            var mapvLayerLineString = new mapv.baiduMapLayer(map, dataSetLineString, optionsLineString);
-
-
-            var dataSetPoint = new mapv.DataSet(timeData);
-
-            var optionsPoint = {
-                fillStyle: 'rgba(255, 250, 250, 0.2)',
-                coordType: 'bd09mc',
-                globalCompositeOperation: "lighter",
-                size: 1.5,
-                animation: {
-                    stepsRange: {
-                        start: 0,
-                        end: 100 
-                    },
-                    trails: 3,
-                    duration: 5,
-                },
-                draw: 'simple'
-            }
-
-            var mapvLayerPoint = new mapv.baiduMapLayer(map, dataSetPoint, optionsPoint);
-        });
-	},
-	getGongxuApi: function(short){
-		var data =[]
-		$.get('static/china-point.json', function (rs) {
+		// 第二个层初始化
+		/*$.get('static/china-point.json', function (rs) {
+			var data =[]
 		    for (var i = 0; i < rs[0].length; i++) {
 		        var geoCoord = rs[0][i].geoCoord;
 		        data.push({
@@ -247,15 +216,8 @@ var CityMaps = {
 		            time: Math.random() * 10
 		        });
 		    }
-		
-		    var dataSet = new mapv.DataSet(data);
 		    var options = {
 		        fillStyle: 'rgba(255, 250, 50, 0.6)',
-		        //shadowColor: 'rgba(255, 250, 50, 0.5)',
-		        //shadowBlur: 3,
-		        updateCallback: function (time) {
-		            console.log('更新完了')
-		        },
 		        size: 3,
 		        draw: 'simple',
 		        animation: {
@@ -268,29 +230,36 @@ var CityMaps = {
 		            duration: 6,
 		        }
 		    }
-		    var mapvLayer = new mapv.baiduMapLayer(map, dataSet, options);
-		});
+		    
+		     // 初始化第一个层的数据
+	        self.mapLayers[1].dataSet.set(data);
+	        // 更新options
+	        self.mapLayers[1].mapvLayer.update({
+				options: options
+			});
+		    
+		});*/
 	},
-	getLujingApi: function(short){
-		$.get('static/car.csv', function(csvstr) {
-	
-	        var options = {
-	            strokeStyle: 'rgba(50, 50, 255, 0.8)',
-	            lineWidth: 0.05,
-	            globalCompositeOperation: 'lighter',
-	            draw: 'simple'
-	        }
-	
-	        var dataSet = mapv.csv.getDataSet(csvstr);
-	
-	        var mapvLayer = new mapv.baiduMapLayer(map, dataSet, options);
-	
-	    });
+	getOneLayer: function(){
+		var dataSet = new mapv.DataSet([]);
+		var options = {};
+		var mapvLayer = new mapv.baiduMapLayer(this.map, dataSet, options);
+		return {
+			dataSet: dataSet,
+			mapvLayer: mapvLayer
+		}
 	},
-	initData: function(){
-		
+	getTwoLayer: function(){
+		var dataSet = new mapv.DataSet([]);
+        var optionsLineString = {};
+        var mapvLayer = new mapv.baiduMapLayer(this.map, dataSet, optionsLineString);
+        // 隐藏第二个层
+        mapvLayer.hide();
+        return {
+			dataSet: dataSet,
+			mapvLayer: mapvLayer
+		}
 	}
-	
 }
 
 	
