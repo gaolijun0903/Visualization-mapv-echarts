@@ -23,28 +23,29 @@ $('.tab-item').click(function(p){
 	if(thisId=='tab-xingyun'){ //1--星云图
 		$('#subtab-list-gongxu').hide();   //供需热力图的 二级切换按钮
 		$('#subtab-list-xingyun').show();	//星云图的 二级切换按钮
-		CityMaps.mapLayers[0].mapvLayer.show();
-		CityMaps.mapLayers[1].mapvLayer.hide();
+//		CityMaps.mapLayers[0].mapvLayer.show();
+//		CityMaps.mapLayers[1].mapvLayer.hide();
 		CityMaps.layerTag = layerTag.XINGYUN;
 	}else if(thisId=='tab-yunli'){  //2--运力状态   //该效果需要两个图层（点、路线）
 		$('#subtab-list-gongxu').hide();
 		$('#subtab-list-xingyun').hide();
-		CityMaps.mapLayers[0].mapvLayer.show();  
-		CityMaps.mapLayers[1].mapvLayer.show();
+//		CityMaps.mapLayers[0].mapvLayer.show();  
+//		CityMaps.mapLayers[1].mapvLayer.show();
 		CityMaps.layerTag = layerTag.YUNLI;
 	}else if(thisId=='tab-gongxu'){  //3--供需热力
 		$('#subtab-list-xingyun').hide();
 		$('#subtab-list-gongxu').show();  //供需热力图的 二级切换按钮
-		CityMaps.mapLayers[0].mapvLayer.show();
-		CityMaps.mapLayers[1].mapvLayer.hide();
+//		CityMaps.mapLayers[0].mapvLayer.show();
+//		CityMaps.mapLayers[1].mapvLayer.hide();
 		CityMaps.layerTag = layerTag.GONGXU;
 	}else if(thisId=='tab-lujing'){ //4--路径经脉
 		$('#subtab-list-gongxu').hide();
 		$('#subtab-list-xingyun').hide();
-		CityMaps.mapLayers[0].mapvLayer.show();
-		CityMaps.mapLayers[1].mapvLayer.hide();
+//		CityMaps.mapLayers[0].mapvLayer.show();
+//		CityMaps.mapLayers[1].mapvLayer.hide();
 		CityMaps.layerTag = layerTag.LUJING;
 	} 
+	setDataFn();
 })
 
 // 四个接口
@@ -57,7 +58,9 @@ var apiUrl = {
 }
 
 
-setInterval(function(){
+//setInterval(setDataFn, 3000)
+
+function setDataFn(){
 	var layerTag = CityMaps.layerTag;
 	console.log('layerTag'+layerTag);
 	var url = '';
@@ -67,19 +70,27 @@ setInterval(function(){
 		case 'xingyun':
 			url = apiUrl.XINGYUN;
 			mapOption1 = MapOptions.XINGYUN;
+			CityMaps.mapLayers[0].mapvLayer.show();
+			CityMaps.mapLayers[1].mapvLayer.hide();
 			break;
 		case 'yunli':
 			url = apiUrl.YUNLI1;
 			mapOption1 = MapOptions.YUNLI1;
 			mapOption2 = MapOptions.YUNLI2;
+			CityMaps.mapLayers[0].mapvLayer.show();  
+			CityMaps.mapLayers[1].mapvLayer.show();
 			break;
 		case 'gongxu':
 			url = apiUrl.GONGXU;
 			mapOption1 = MapOptions.GONGXU;
+			CityMaps.mapLayers[0].mapvLayer.show();
+			CityMaps.mapLayers[1].mapvLayer.hide();
 			break;
 		case 'lujing':
 			url = apiUrl.LUJING;
 			mapOption1 = MapOptions.LUJING;
+			CityMaps.mapLayers[0].mapvLayer.show();
+			CityMaps.mapLayers[1].mapvLayer.hide();
 			break;
 	}
 	
@@ -104,7 +115,6 @@ setInterval(function(){
 		gongxuFn(mapOption1,mapOption2);
 		
 	}else if(layerTag=='lujing'){
-		
 		$.ajax({
 			type:"get",
 			url:url,
@@ -112,35 +122,12 @@ setInterval(function(){
 			success: function(data){
 				CityMaps.updateLayerData(data,'',mapOption1,mapOption2)
 			},
-			error: function(){
-				
-			}
+			error: function(){}
 		});
 		
 	}
-	
-	
-	
-//	if(url != ''){
-//		$.ajax({
-//			type:"get",
-//			url:url,
-//			async:true,
-//			success: function(rs){
-//				
-//				var data1 = [];
-//				var data2 = [];
-//				CityMaps.updateLayerData(data1,data2,mapOption1,mapOption2)
-//			},
-//			error: function(){
-//				
-//			}
-//		});
-//	}
-	
-}, 3000)
 
-
+}
 
 
 //临时构造数据
@@ -160,14 +147,13 @@ function xingyunFn(mapOption1,mapOption2){
             time: 100 * Math.random()
         });
     }
-    
     CityMaps.updateLayerData(data,'',mapOption1,mapOption2)
 }
 function gongxuFn(mapOption1,mapOption2){
-	var data = [];
-	var randomCount = 300;
+	var randomCount = 1000;
+    var data = [];
     var citys = ["北京","天津","上海","重庆","石家庄","太原","呼和浩特","哈尔滨","长春","沈阳","济南","南京","合肥","杭州","南昌","福州","郑州","武汉","长沙","广州","南宁","西安","银川","兰州","西宁","乌鲁木齐","成都","贵阳","昆明","拉萨","海口"];
-    // 构造数据
+        // 构造数据
     while (randomCount--) {
         var cityCenter = mapv.utilCityCenter.getCenterByCityName(citys[parseInt(Math.random() * citys.length)]);
         data.push({
@@ -175,7 +161,8 @@ function gongxuFn(mapOption1,mapOption2){
                 type: 'Point',
                 coordinates: [cityCenter.lng - 2 + Math.random() * 4, cityCenter.lat - 2 + Math.random() * 4]
             },
-            count: 30 * Math.random()
+            count: 30 * Math.random(),
+            time: 100 * Math.random()
         });
     }
     CityMaps.updateLayerData(data,'',mapOption1,mapOption2)

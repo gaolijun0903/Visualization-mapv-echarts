@@ -6,10 +6,10 @@ var layerTag = {
 }
 //mapv图层配置
 var MapOptions = {
-	'XINGYUN':{fillStyle:'rgba(55, 50, 250, 0.2)',globalCompositeOperation:"lighter",size:15,animation:{type:'time',stepsRange:{start:0,end:100},trails:10,duration:5,},draw:'simple'},
+	'XINGYUN':{fillStyle:'rgba(55, 50, 250, 0.2)',globalCompositeOperation:"lighter",size:15,draw:'simple'},
 	'YUNLI1':{strokeStyle:'rgba(53,57,255,0.5)',coordType:'bd09mc',shadowColor:'rgba(53,57,255,0.2)',shadowBlur:3,lineWidth:3.0,draw:'simple'},
-	'YUNLI2':{fillStyle:'rgba(255, 250, 250, 0.2)',coordType:'bd09mc',globalCompositeOperation:"lighter",size:1.5,animation:{stepsRange:{start:0,end:100},trails:3,duration:5,},draw:'simple'},
-	'GONGXU':{size:13,gradient:{0.25:"rgb(0,0,255)",0.55:"rgb(0,255,0)",0.85:"yellow",1.0:"rgb(255,0,0)"},max:60,animation:{type:'time',stepsRange:{start:0,end:100},trails:10,duration:4,},draw:'heatmap'},
+	'YUNLI2':{fillStyle:'rgba(255, 250, 250, 0.2)',coordType:'bd09mc',globalCompositeOperation:"lighter",size:1.5,draw:'simple'},
+	'GONGXU':{size:13,gradient:{0.25:"rgb(0,0,255)",0.55:"rgb(0,255,0)",0.85:"yellow",1.0:"rgb(255,0,0)"},max:60,draw:'heatmap'},
 	'LUJING':{strokeStyle:'rgba(50, 50, 255, 0.8)',lineWidth:0.05,globalCompositeOperation:'lighter',draw:'simple'}
 };
 //地图的自定义样式 	
@@ -68,21 +68,22 @@ var CityMaps = {
 		}
 	},
 	updateLayerData: function(data1,data2,options1,options2){ //图层切换时，更新数据和配置
+		
 		// 更新数据
         this.mapLayers[0].dataSet.set(data1);
         if(data2){
         	this.mapLayers[1].dataSet.set(data2);
         }
         // 更新options
-        if(options2){
-	        this.mapLayers[0].mapvLayer.update({
-				options: options1
-			});
+        if(options1){
+        		console.log(this.mapLayers[0].mapvLayer.options)
+	        this.mapLayers[0].mapvLayer.setOptions(
+				 options1
+			);
 		}
 		if(options2){
-			this.mapLayers[1].mapvLayer.update({
-				options: options2
-			});
+			this.mapLayers[1].mapvLayer.setOptions( options2
+			);
 		}
 				
 	}
