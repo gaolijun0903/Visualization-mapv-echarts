@@ -1,6 +1,6 @@
 
 //头部时间的动态显示
-minuteTimer($('#time-show'));
+Utils.minuteTimer($('#time-show'));
 
 
 //左侧数据的动态变化效果

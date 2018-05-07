@@ -52,11 +52,10 @@
 						</li>
 					</ul>
 				</div>
-					
 			</section>
 			
 			<section class="center-container">
-				<div id="map"></div>
+				<div id="map"></div>  <!--地图及图层容器-->
 				<canvas id="canvas" width="100%" height="100%"></canvas>
 			</section>
 			
@@ -66,38 +65,38 @@
 					<span class="corner tr"></span>
 					<span class="corner bl"></span>
 					<span class="corner br"></span>
-    					<div class="echart-box" id="tab">
-    						<ul class="tab-list">
-    							<li class="tab-item tab-item-active" id="tab-xingyun"><span class="tab-item-inner">星云图</span></li>
-    							<li class="tab-item" id="tab-yunli"><span class="tab-item-inner">运力状态</span></li>
-    							<li class="tab-item" id="tab-gongxu"><span class="tab-item-inner">供需热力</span></li>
-    							<li class="tab-item" id="tab-lujing"><span class="tab-item-inner">路径脉络</span></li>
-    						</ul>
-    						<ul class="subtab-list" id="subtab-list-xingyun">
-    							<li class="subtab-item">定位</li>
-    							<li class="subtab-item">搜索</li>
-    							<li class="subtab-item">创建订单</li>
-    							<li class="subtab-item">抢单</li>
-    						</ul>
-    						<ul class="subtab-list" id="subtab-list-gongxu">
-    							<li class="subtab-item">需求量</li>
-    							<li class="subtab-item">供给量</li>
-    						</ul>
-    					</div>
+					<div class="echart-box" id="tab">
+						<ul class="tab-list">
+							<li class="tab-item tab-item-active" id="tab-xingyun"><span class="tab-item-inner">星云图</span></li>
+							<li class="tab-item" id="tab-yunli"><span class="tab-item-inner">运力状态</span></li>
+							<li class="tab-item" id="tab-gongxu"><span class="tab-item-inner">供需热力</span></li>
+							<li class="tab-item" id="tab-lujing"><span class="tab-item-inner">路径脉络</span></li>
+						</ul>
+						<ul class="subtab-list" id="subtab-list-xingyun">  <!--星云图的二级切换按钮-->
+							<li class="subtab-item">定位</li>
+							<li class="subtab-item">搜索</li>
+							<li class="subtab-item">创建订单</li>
+							<li class="subtab-item">抢单</li>
+						</ul>
+						<ul class="subtab-list" id="subtab-list-gongxu">   <!--供需热力的二级切换按钮-->
+							<li class="subtab-item">需求量</li>
+							<li class="subtab-item">供给量</li>
+						</ul>
+					</div>
 				</section>
 				<section class="right-cell-container right-middle-container">
 					<span class="corner tl"></span>
 					<span class="corner tr"></span>
 					<span class="corner bl"></span>
 					<span class="corner br"></span>
-					<div class="echart-box" id="yunli"></div>
+					<div class="echart-box" id="yunli"></div>  <!--运力图表容器-->
 				</section>
 				<section class="right-cell-container right-bottom-container">
 					<span class="corner tl"></span>
 					<span class="corner tr"></span>
 					<span class="corner bl"></span>
 					<span class="corner br"></span>
-					<div class="echart-box" id="gongxu"></div>
+					<div class="echart-box" id="gongxu"></div>  <!--供需图表容器-->
 				</section>
 			</section>
 		</div>
@@ -111,10 +110,7 @@
     <!-- 引入 ECharts 文件 -->
 	<script src="https://cdn.bootcss.com/echarts/4.0.4/echarts-en.common.js"></script>
 	<script src="lib/countup.js"></script>
-	<script src="js/common.js"></script>
-	<!--<script src="js/city.js"></script>
-	<script src="js/city-charts.js"></script>
-	<script src="js/city-map.js"></script>-->
+	<script src="js/utils.js"></script>
 	<script src="js/city-maps.js"></script>
 	<script src="js/city.js"></script>
 	<script src="js/city-charts.js"></script>

@@ -4,12 +4,264 @@
 	<meta charset="UTF-8">
 	<title></title>
 
-   
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
 
+    <div id="map"></div>
+    <canvas id="canvas"></canvas>
+
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=1XjLLEhZhQNUzd93EjU5nOGQ"></script>
+    <script type="text/javascript" src="lib/mapv.js"></script>
+
+    <script type="text/javascript">
+
+        // 百度地图API功能
+        var map = new BMap.Map("map", {
+            enableMapClick: false
+        });    // 创建Map实例
+        map.centerAndZoom(new BMap.Point(106.563777, 29.578285), 12);  // 初始化地图,设置中心点坐标和地图级别
+        map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
+
+        // 地图自定义样式
+        map.setMapStyle({
+            styleJson: [
+          {
+                    "featureType": "land",
+                    "elementType": "geometry",
+                    "stylers": {
+                              "color": "#212121"
+                    }
+          },
+          {
+                    "featureType": "building",
+                    "elementType": "geometry",
+                    "stylers": {
+                              "color": "#2b2b2b"
+                    }
+          },
+          {
+                    "featureType": "highway",
+                    "elementType": "all",
+                    "stylers": {
+                              "lightness": -75,
+                              "saturation": -91
+                    }
+          },
+          {
+                    "featureType": "arterial",
+                    "elementType": "geometry",
+                    "stylers": {
+                              "lightness": -82,
+                              "saturation": -94
+                    }
+          },
+          {
+                    "featureType": "green",
+                    "elementType": "geometry",
+                    "stylers": {
+                              "color": "#1b1b1b"
+                    }
+          },
+          {
+                    "featureType": "water",
+                    "elementType": "geometry",
+                    "stylers": {
+                              "color": "#181818"
+                    }
+          },
+          {
+                    "featureType": "subway",
+                    "elementType": "all",
+                    "stylers": {
+                              "lightness": -100,
+                              "saturation": -91
+                    }
+          },
+          {
+                    "featureType": "railway",
+                    "elementType": "geometry",
+                    "stylers": {
+                              "lightness": -84
+                    }
+          },
+          {
+                    "featureType": "all",
+                    "elementType": "labels.text.stroke",
+                    "stylers": {
+                              "color": "#313131"
+                    }
+          },
+          {
+                    "featureType": "all",
+                    "elementType": "labels",
+                    "stylers": {
+                              "color": "#8b8787",
+                              "lightness": -19,
+                              "visibility": "off"
+                    }
+          },
+          {
+                    "featureType": "manmade",
+                    "elementType": "geometry",
+                    "stylers": {
+                              "color": "#1b1b1b"
+                    }
+          },
+          {
+                    "featureType": "local",
+                    "elementType": "geometry",
+                    "stylers": {
+                              "lightness": -97,
+                              "saturation": -100,
+                              "visibility": "off"
+                    }
+          },
+          {
+                    "featureType": "subway",
+                    "elementType": "geometry",
+                    "stylers": {
+                              "lightness": -76
+                    }
+          },
+          {
+                    "featureType": "railway",
+                    "elementType": "all",
+                    "stylers": {
+                              "lightness": -40,
+                              "visibility": "off"
+                    }
+          },
+          {
+                    "featureType": "boundary",
+                    "elementType": "geometry",
+                    "stylers": {
+                              "color": "#8b8787",
+                              "weight": "1",
+                              "lightness": -29
+                    }
+          }
+        ] 
+        });
+
+        $.get('static/car.json', function(csvstr) {
+
+            var options = {
+                strokeStyle: 'rgba(50, 50, 255, 0.8)',
+                lineWidth: 0.05,
+                globalCompositeOperation: 'lighter',
+                draw: 'simple'
+            }
+//          var dataSet = mapv.csv.getDataSet(csvstr);
+            var dataSet = new mapv.DataSet(csvstr);
+
+            var mapvLayer = new mapv.baiduMapLayer(map, dataSet, options);
+
+        });
+        
+        
+        //临时构造数据
+function xingyunFn(){
+	var data = [];
+    var citys = ["北京","天津","上海","重庆","石家庄","太原","呼和浩特","哈尔滨","长春","沈阳","济南","南京","合肥","杭州","南昌","福州","郑州","武汉","长沙","广州","南宁","西安","银川","兰州","西宁","乌鲁木齐","成都","贵阳","昆明","拉萨","海口"];
+    // 构造数据
+    while (randomCount--) {
+        var cityCenter = mapv.utilCityCenter.getCenterByCityName(citys[parseInt(Math.random() * citys.length)]);
+        data.push({
+            geometry: {
+                type: 'Point',
+                coordinates: [cityCenter.lng - 2 + Math.random() * 4, cityCenter.lat - 2 + Math.random() * 4]
+            },
+            count: 30 * Math.random(),
+            time: 100 * Math.random()
+        });
+    }
     
-	
+    return data;
+}
+function gongxuFn(){
+	var data = [];
+    var citys = ["北京","天津","上海","重庆","石家庄","太原","呼和浩特","哈尔滨","长春","沈阳","济南","南京","合肥","杭州","南昌","福州","郑州","武汉","长沙","广州","南宁","西安","银川","兰州","西宁","乌鲁木齐","成都","贵阳","昆明","拉萨","海口"];
+    // 构造数据
+    while (randomCount--) {
+        var cityCenter = mapv.utilCityCenter.getCenterByCityName(citys[parseInt(Math.random() * citys.length)]);
+        data.push({
+            geometry: {
+                type: 'Point',
+                coordinates: [cityCenter.lng - 2 + Math.random() * 4, cityCenter.lat - 2 + Math.random() * 4]
+            },
+            count: 30 * Math.random()
+        });
+    }
+    return data;
+}
+
+function  yunliFn(){
+	var data = [];
+    var timeData = [];
+    rs = rs.split("\n");
+    console.log(rs.length);
+    var maxLength = 0;
+    for (var i = 0; i < rs.length; i++) {
+        var item = rs[i].split(',');
+        var coordinates = [];
+        if (item.length > maxLength) {
+            maxLength = item.length;
+        }
+        for (j = 0; j < item.length; j += 2) {
+            coordinates.push([item[j], item[j + 1]]);
+            timeData.push({
+                geometry: {
+                    type: 'Point',
+                    coordinates: [item[j], item[j + 1]]
+                },
+                count: 1,
+                time: j
+            });
+        }
+        data.push({
+            geometry: {
+                type: 'LineString',
+                coordinates: coordinates
+            }
+        });
+    }
+    
+    return {
+    	data1:data,
+    	data2:timeData
+    }
+}
+
+var randomCount = 300;
+var xingyunData = xingyunFn();
+//var gongxuData = gongxuFn();
+//var yunliData = yunliFn();
+
+console.log(xingyunData)
+console.log("=========================")
+
+//console.log(gongxuData)
+console.log("=========================")
+//console.log(yunliData)
+console.log("=========================")
+
+
+    </script>
 	
 </body>
 </html>
