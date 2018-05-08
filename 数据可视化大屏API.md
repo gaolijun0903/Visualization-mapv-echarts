@@ -33,24 +33,6 @@ msg : 当ret_code!=1000 都应该有错误信息
 }
 
 
-	"data": [	
-		{
-            "geometry": {
-                type: 'Point',
-                coordinates: [116.412878, 40.075240]
-            },
-            "time": Math.random() * 10
-       },
-       {
-            "geometry": {
-                type: 'Point',
-                coordinates: [116.412878, 40.075240]
-            },
-            "time": Math.random() * 10
-       },
-        ...
-    ]
-
 ### 平台当前里程数（累计）
 
 必传参数：城市(city)、时间(timestamp) 
@@ -217,7 +199,7 @@ http://rap2api.taobao.org/app/mock/12662/map/supply_demand_group?city=bj&timesta
 		"before"：[1000, 1000, 1000, 1000, 1000, 1000] ,  //1分钟前数据
 		"current":[1005, 1005, 1005, 1005, 1005, 1005]   //当前时间数据
 	}
-	//  0--创建订单量, 1--当前服务量, 2--当前里程数, 3--服务时长, 4--需求量, 5--当前运力
+	// 顺序   0--创建订单量, 1--当前服务量, 2--当前里程数, 3--服务时长, 4--需求量, 5--当前运力
 	
 2、运力分布，
 	首页的期望数据格式：
@@ -238,6 +220,12 @@ http://rap2api.taobao.org/app/mock/12662/map/supply_demand_group?city=bj&timesta
 	}
 	
 3\平台服务Top8城市
+"data":{
+	name: ['郑州','哈尔滨','福建','温州','深圳','广州','上海','北京']，
+	data: [11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000]，
+	city: [zz, hrb, fj, 。。。。]
+}
+
 	"data": [11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000]
 	//顺序--- '北京','上海','广州','深圳','温州','福建','哈尔滨','郑州'
 	
@@ -249,3 +237,114 @@ http://rap2api.taobao.org/app/mock/12662/map/supply_demand_group?city=bj&timesta
     
 
 5\地图数据
+  	首页 ：已提供
+  	城市页：4个，未提供
+
+右侧刷新1小时
+"lat": 40.075240,
+            "lng": 116.412878
+1\星云点图
+"data":[
+	{
+        geometry: {
+            type: 'Point',
+            coordinates: [116.412878, 40.075240]
+        }
+   	},
+    {
+        geometry: {
+            type: 'Point',
+            coordinates: [116.412878, 40.075240]
+        }
+   }
+]
+
+2\运力图
+"data"：{
+	point:[
+		{
+            geometry: {
+                type: 'Point',
+                coordinates: [116.412878, 40.075240]
+            }
+       },
+       {
+            geometry: {
+                type: 'Point',
+                coordinates: [116.412878, 40.075240]
+            }
+        }
+            
+    ],
+    
+    line:[
+    	{
+            geometry: {
+                type: 'LineString',
+                coordinates: [
+                	[116.412878, 40.075240],[116.412878, 40.075240],[116.412878, 40.075240]
+                ]
+            }
+       	},
+       	{
+            geometry: {
+                type: 'LineString',
+                coordinates:  [
+                	[116.412878, 40.075240],[116.412878, 40.075240],[116.412878, 40.075240]
+                ]
+            }
+       	},
+       	{
+            geometry: {
+                type: 'LineString',
+                coordinates:  [
+                	[116.412878, 40.075240],[116.412878, 40.075240],[116.412878, 40.075240]
+                ]
+            }
+        }
+    ]
+}
+
+3\供需热力图
+"data"：[
+	{
+        geometry: {
+            type: 'Point',
+            coordinates: [116.412878, 40.075240]
+        }
+   	},
+    {
+        geometry: {
+            type: 'Point',
+            coordinates: [116.412878, 40.075240]
+        }
+   }
+]
+
+4、路径脉络
+"data"：[
+    	{
+            geometry: {
+                type: 'LineString',
+                coordinates: [
+                	[116.412878, 40.075240],[116.412878, 40.075240],[116.412878, 40.075240]
+                ]
+            }
+       	},
+       	{
+            geometry: {
+                type: 'LineString',
+                coordinates:  [
+                	[116.412878, 40.075240],[116.412878, 40.075240],[116.412878, 40.075240]
+                ]
+            }
+       	},
+       	{
+            geometry: {
+                type: 'LineString',
+                coordinates:  [
+                	[116.412878, 40.075240],[116.412878, 40.075240],[116.412878, 40.075240]
+                ]
+            }
+        }
+    ]

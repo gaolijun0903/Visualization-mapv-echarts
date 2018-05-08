@@ -148,39 +148,38 @@ map.setMapStyle({
 
 
 
-var url = 'http://rap2api.taobao.org/app/mock/12662/map/create_order_location?city=bj&timestamp=1525747088';
-//var url = 'static/china-point.json'
+//var url = 'http://rap2api.taobao.org/app/mock/12662/map/create_order_location?city=bj&timestamp=1525747088';
+var url = 'static/china-point.json'
+//var url = 'static/app.json'
 $.get(url, function (rs) {
 	var data = [];
-	console.log(new Date().getTime())
-	var data = rs.data;
-	console.log(data.length)
-    for (var i = 0; i < data.length; i++) {
-        var lng = data[i].lng;
-        var lat = data[i].lat;
-        data.push({
-            geometry: {
-                type: 'Point',
-                coordinates: [lng,lat] 
-            },
-            time: Math.random() * 10
-        });
-    }
-	
-//	console.log(rs[0].length)//19212
-//  for (var i = 0; i < rs[0].length; i++) {
-//      var geoCoord = rs[0][i].geoCoord;
+//	var data0 = rs.data;
+//  for (var i = 0; i < data0.length; i++) {
+//      var lng = data0[i].lng;
+//      var lat = data0[i].lat;
+//      
 //      data.push({
 //          geometry: {
 //              type: 'Point',
-//              coordinates: geoCoord 
+//              coordinates: [lng,lat]
 //          },
 //          time: Math.random() * 10
 //      });
 //  }
-    
-	console.log(new Date().getTime())
 	
+	console.log(rs[0].length)//19212
+    for (var i = 0; i < rs[0].length; i++) {
+        var geoCoord = rs[0][i].geoCoord;
+        data.push({
+            geometry: {
+                type: 'Point',
+                coordinates: geoCoord 
+            },
+            time: Math.random() * 10
+        });
+    }
+    
+	console.log(data)
     var dataSet = new mapv.DataSet(data);
     var options = {
         fillStyle: 'rgba(255, 250, 50, 0.6)',

@@ -26,7 +26,10 @@ $('.tab-item').click(function(p){
 	if(thisId=='tab-xingyun'){ //1--星云图
 		$('#subtab-list-gongxu').hide();   //供需热力图的 二级切换按钮
 		$('#subtab-list-xingyun').show();	//星云图的 二级切换按钮
-		CityMaps.layerTag = layerTag.XINGYUN;
+		$('#subtab-list-xingyun .subtab-item')
+			.first().addClass('subtab-item-active')
+			.siblings().removeClass('subtab-item-active');
+		CityMaps.layerTag = layerTag.XINGYUN_LOCATION;
 	}else if(thisId=='tab-yunli'){  //2--运力状态   //该效果需要两个图层（点、路线）
 		$('#subtab-list-gongxu').hide();
 		$('#subtab-list-xingyun').hide();
@@ -34,7 +37,10 @@ $('.tab-item').click(function(p){
 	}else if(thisId=='tab-gongxu'){  //3--供需热力
 		$('#subtab-list-xingyun').hide();
 		$('#subtab-list-gongxu').show();  //供需热力图的 二级切换按钮
-		CityMaps.layerTag = layerTag.GONGXU;
+		$('#subtab-list-gongxu .subtab-item')
+			.first().addClass('subtab-item-active')
+			.siblings().removeClass('subtab-item-active');
+		CityMaps.layerTag = layerTag.GONGXU_DEMAND;
 	}else if(thisId=='tab-lujing'){ //4--路径经脉
 		$('#subtab-list-gongxu').hide();
 		$('#subtab-list-xingyun').hide();
@@ -44,53 +50,37 @@ $('.tab-item').click(function(p){
 })
 
 //星云图的二级切换按钮点击事件
-$('#subtab-list-xingyun .subtab-item').click(function(p){
+$('.subtab-item').click(function(p){
 	$(this).addClass('subtab-item-active').siblings().removeClass('subtab-item-active');
 	var thisId = $(this)[0].id;
-	if(thisId=='subtab-location'){ //1--星云图
-		
-		
-	}else if(thisId=='subtab-search'){  //2--运力状态   //该效果需要两个图层（点、路线）
-		
-		CityMaps.layerTag = layerTag.YUNLI;
-	}else if(thisId=='subtab-create'){  //3--供需热力
-		
-		CityMaps.layerTag = layerTag.GONGXU;
-	}else if(thisId=='subtab-qiang'){ //4--路径经脉
-		
-		CityMaps.layerTag = layerTag.LUJING;
-	} 
-	
-	CityMaps.layerTag = layerTag.XINGYUN;
-	setDataFn();
-})
-
-//供需热力图的二级切换按钮点击事件
-$('#subtab-list-gongxu .subtab-item').click(function(p){
-	$(this).addClass('subtab-item-active').siblings().removeClass('subtab-item-active');
-	var thisId = $(this)[0].id;
-	if(thisId=='subtab-demand'){ //1--星云图
-		
-		
-	}else if(thisId=='subtab-supply'){  //2--运力状态   //该效果需要两个图层（点、路线）
-		
+	if(thisId=='subtab-location'){ //1--星云图--定位
+		CityMaps.layerTag = layerTag.XINGYUN_LOCATION;
+	}else if(thisId=='subtab-search'){  //2--星云图--搜索
+		CityMaps.layerTag = layerTag.XINGYUN_SEARCH;
+	}else if(thisId=='subtab-create'){  //3--星云图--创建订单
+		CityMaps.layerTag = layerTag.XINGYUN_CREATE;
+	}else if(thisId=='subtab-qiang'){ //4--星云图--抢单
+		CityMaps.layerTag = layerTag.XINGYUN_QIANG;
+	}else if(thisId=='subtab-demand'){ //1--供需热力图--需求
+		CityMaps.layerTag = layerTag.GONGXU_DEMAND;
+	}else if(thisId=='subtab-supply'){  //2--供需热力图 --供应
+		CityMaps.layerTag = layerTag.GONGXU_SUPPLY;
 	}
-	
-	CityMaps.layerTag = layerTag.GONGXU;
 	setDataFn();
 })
-
-
 
 // 四个接口
 var apiUrl = {
-	'XINGYUN': 'static/car.json', //蓝点--自己构造
+	'XINGYUN_LOCATION': 'static/car.json', //蓝点--自己构造
+	'XINGYUN_SEARCH': 'static/car.json', //蓝点--自己构造
+	'XINGYUN_CREATE': 'static/car.json', //蓝点--自己构造
+	'XINGYUN_QIANG': 'static/car.json', //蓝点--自己构造
 	'YUNLI1': 'static/wuhan-car.js',
 	'YUNLI2': 'static/wuhan-car.js',
-	'GONGXU': 'static/car.json',  //热力图---构造
+	'GONGXU_DEMAND': 'static/car.json',  //热力图---自己构造
+	'GONGXU_SUPPLY': 'static/car.json',  //热力图---自己构造
 	'LUJING': 'static/car.json'   //直接可用
 }
-
 
 //setInterval(setDataFn, 3000)
 setDataFn();
@@ -101,8 +91,26 @@ function setDataFn(){
 	var mapOption1 = null;
 	var mapOption2 = null;
 	switch(layerTag){
-		case 'xingyun':
-			url = apiUrl.XINGYUN;
+		case 'xingyun_location':
+			url = apiUrl.XINGYUN_LOCATION;
+			mapOption1 = MapOptions.XINGYUN;
+			CityMaps.mapLayers[0].mapvLayer.show();
+			CityMaps.mapLayers[1].mapvLayer.hide();
+			break;
+		case 'xingyun_search':
+			url = apiUrl.XINGYUN_SEARCH;
+			mapOption1 = MapOptions.XINGYUN;
+			CityMaps.mapLayers[0].mapvLayer.show();
+			CityMaps.mapLayers[1].mapvLayer.hide();
+			break;
+		case 'xingyun_create':
+			url = apiUrl.XINGYUN_CREATE;
+			mapOption1 = MapOptions.XINGYUN;
+			CityMaps.mapLayers[0].mapvLayer.show();
+			CityMaps.mapLayers[1].mapvLayer.hide();
+			break;
+		case 'xingyun_qiang':
+			url = apiUrl.XINGYUN_QIANG;
 			mapOption1 = MapOptions.XINGYUN;
 			CityMaps.mapLayers[0].mapvLayer.show();
 			CityMaps.mapLayers[1].mapvLayer.hide();
@@ -114,8 +122,14 @@ function setDataFn(){
 			CityMaps.mapLayers[0].mapvLayer.show();  
 			CityMaps.mapLayers[1].mapvLayer.show();
 			break;
-		case 'gongxu':
-			url = apiUrl.GONGXU;
+		case 'gongxu_demand':
+			url = apiUrl.GONGXU_DEMAND;
+			mapOption1 = MapOptions.GONGXU;
+			CityMaps.mapLayers[0].mapvLayer.show();
+			CityMaps.mapLayers[1].mapvLayer.hide();
+			break;
+		case 'gongxu_supply':
+			url = apiUrl.GONGXU_SUPPLY;
 			mapOption1 = MapOptions.GONGXU;
 			CityMaps.mapLayers[0].mapvLayer.show();
 			CityMaps.mapLayers[1].mapvLayer.hide();
@@ -128,7 +142,13 @@ function setDataFn(){
 			break;
 	}
 	
-	if(layerTag=='xingyun'){
+	getDataFn(url,mapOption1,mapOption2)
+
+}
+
+
+function getDataFn(url, option1,option2){
+	if(layerTag=='xingyun_location' ||layerTag=='xingyun_search' ||layerTag=='xingyun_create' ||layerTag=='xingyun_qiang'){
 		xingyunFn(mapOption1,mapOption2);
 		
 	}else if(layerTag=='yunli'){
@@ -145,7 +165,7 @@ function setDataFn(){
 			}
 		});
 		
-	}else if(layerTag=='gongxu'){
+	}else if(layerTag=='gongxu_demand' || layerTag=='gongxu_supply'){
 		gongxuFn(mapOption1,mapOption2);
 		
 	}else if(layerTag=='lujing'){
@@ -160,9 +180,7 @@ function setDataFn(){
 		});
 		
 	}
-
 }
-
 
 //临时构造数据
 function xingyunFn(mapOption1,mapOption2){
