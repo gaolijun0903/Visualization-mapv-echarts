@@ -1,11 +1,7 @@
 var layerTag = {
-	'XINGYUN_LOCATION': 'xingyun_location',
-	'XINGYUN_SEARCH': 'xingyun_search',
-	'XINGYUN_CREATE': 'xingyun_create',
-	'XINGYUN_QIANG': 'xingyun_qiang',
+	'XINGYUN': 'xingyun',
 	'YUNLI': 'yunli',
-	'GONGXU_DEMAND': 'gongxu_demand',
-	'GONGXU_SUPPLY': 'gongxu_supply',
+	'GONGXU': 'gongxu',
 	'LUJING': 'lujing'
 }
 //mapv图层配置
@@ -45,7 +41,7 @@ var MapStyle = {
 var CityMaps = {
 	map: null,
 	mapLayers:[],
-	layerTag: layerTag.XINGYUN_LOCATION,
+	layerTag: layerTag.XINGYUN,
 	init: function(lng,lat){
 		this.map = new BMap.Map("map", { enableMapClick: false}); // 创建地图实例  
 		this.map.centerAndZoom(new BMap.Point(lng, lat), 6);  // 初始化地图，设置中心点坐标和地图级别  
