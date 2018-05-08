@@ -1,52 +1,86 @@
 //获取城市简码
 var cityshort = Utils.getQueryString('cityshort') || 'bj';
+
 var cityInfo = {
-	'bj':{lng:116.4136103013,lat:39.9110666857},
-	'sh':{lng:121.4803295328,lat:31.2363429624},
-	'gz':{lng:113.2708136740,lat:23.1351666766},
-	'sz':{lng:114.0661345267,lat:22.5485544122},
-	'wz':{lng:120.7058617854,lat:28.0011792279},
-	'fj':{lng:119.3030722518,lat:26.1059198357},
-	'heb':{lng:126.5424184340,lat:45.8077839548},
-	'zz':{lng:113.6313915479,lat:34.7533581487}
+	'bj':{name:'北京',lng:116.4136103013,lat:39.9110666857},
+	'sh':{name:'上海',lng:121.4803295328,lat:31.2363429624},
+	'gz':{name:'广州',lng:113.2708136740,lat:23.1351666766},
+	'sz':{name:'深圳',lng:114.0661345267,lat:22.5485544122},
+	'wz':{name:'温州',lng:120.7058617854,lat:28.0011792279},
+	'fj':{name:'福建',lng:119.3030722518,lat:26.1059198357},
+	'heb':{name:'哈尔滨',lng:126.5424184340,lat:45.8077839548},
+	'zz':{name:'郑州',lng:113.6313915479,lat:34.7533581487}
 }
+var name = cityInfo[cityshort].name;
+$('#city-name').html(name);
 var citylng = cityInfo[cityshort].lng; //获取城市经度
 var citylat = cityInfo[cityshort].lat; //获取城市纬度
 console.log(cityshort,citylng,citylat);
 //初始化地图及图层
 CityMaps.init(citylng,citylat);
 
-//右上方的切换按钮点击事件
+//右上方的一级切换按钮点击事件
 $('.tab-item').click(function(p){
 	$(this).addClass('tab-item-active').siblings().removeClass('tab-item-active');
 	var thisId = $(this)[0].id;
 	if(thisId=='tab-xingyun'){ //1--星云图
 		$('#subtab-list-gongxu').hide();   //供需热力图的 二级切换按钮
 		$('#subtab-list-xingyun').show();	//星云图的 二级切换按钮
-//		CityMaps.mapLayers[0].mapvLayer.show();
-//		CityMaps.mapLayers[1].mapvLayer.hide();
 		CityMaps.layerTag = layerTag.XINGYUN;
 	}else if(thisId=='tab-yunli'){  //2--运力状态   //该效果需要两个图层（点、路线）
 		$('#subtab-list-gongxu').hide();
 		$('#subtab-list-xingyun').hide();
-//		CityMaps.mapLayers[0].mapvLayer.show();  
-//		CityMaps.mapLayers[1].mapvLayer.show();
 		CityMaps.layerTag = layerTag.YUNLI;
 	}else if(thisId=='tab-gongxu'){  //3--供需热力
 		$('#subtab-list-xingyun').hide();
 		$('#subtab-list-gongxu').show();  //供需热力图的 二级切换按钮
-//		CityMaps.mapLayers[0].mapvLayer.show();
-//		CityMaps.mapLayers[1].mapvLayer.hide();
 		CityMaps.layerTag = layerTag.GONGXU;
 	}else if(thisId=='tab-lujing'){ //4--路径经脉
 		$('#subtab-list-gongxu').hide();
 		$('#subtab-list-xingyun').hide();
-//		CityMaps.mapLayers[0].mapvLayer.show();
-//		CityMaps.mapLayers[1].mapvLayer.hide();
 		CityMaps.layerTag = layerTag.LUJING;
 	} 
 	setDataFn();
 })
+
+//星云图的二级切换按钮点击事件
+$('#subtab-list-xingyun .subtab-item').click(function(p){
+	$(this).addClass('subtab-item-active').siblings().removeClass('subtab-item-active');
+	var thisId = $(this)[0].id;
+	if(thisId=='subtab-location'){ //1--星云图
+		
+		
+	}else if(thisId=='subtab-search'){  //2--运力状态   //该效果需要两个图层（点、路线）
+		
+		CityMaps.layerTag = layerTag.YUNLI;
+	}else if(thisId=='subtab-create'){  //3--供需热力
+		
+		CityMaps.layerTag = layerTag.GONGXU;
+	}else if(thisId=='subtab-qiang'){ //4--路径经脉
+		
+		CityMaps.layerTag = layerTag.LUJING;
+	} 
+	
+	CityMaps.layerTag = layerTag.XINGYUN;
+	setDataFn();
+})
+
+//供需热力图的二级切换按钮点击事件
+$('#subtab-list-gongxu .subtab-item').click(function(p){
+	$(this).addClass('subtab-item-active').siblings().removeClass('subtab-item-active');
+	var thisId = $(this)[0].id;
+	if(thisId=='subtab-demand'){ //1--星云图
+		
+		
+	}else if(thisId=='subtab-supply'){  //2--运力状态   //该效果需要两个图层（点、路线）
+		
+	}
+	
+	CityMaps.layerTag = layerTag.GONGXU;
+	setDataFn();
+})
+
+
 
 // 四个接口
 var apiUrl = {
@@ -59,7 +93,7 @@ var apiUrl = {
 
 
 //setInterval(setDataFn, 3000)
-
+setDataFn();
 function setDataFn(){
 	var layerTag = CityMaps.layerTag;
 	console.log('layerTag'+layerTag);

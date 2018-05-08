@@ -6,10 +6,10 @@ var layerTag = {
 }
 //mapv图层配置
 var MapOptions = {
-	'XINGYUN':{fillStyle:'rgba(55, 50, 250, 0.2)',globalCompositeOperation:"lighter",size:15,draw:'simple'},
+	'XINGYUN':{fillStyle:'rgba(255, 250, 50, 0.6)',globalCompositeOperation:"lighter",size:5,draw:'simple'},
 	'YUNLI1':{strokeStyle:'rgba(53,57,255,0.5)',coordType:'bd09mc',shadowColor:'rgba(53,57,255,0.2)',shadowBlur:3,lineWidth:3.0,draw:'simple'},
 	'YUNLI2':{fillStyle:'rgba(255, 250, 250, 0.2)',coordType:'bd09mc',globalCompositeOperation:"lighter",size:1.5,draw:'simple'},
-	'GONGXU':{size:13,gradient:{0.25:"rgb(0,0,255)",0.55:"rgb(0,255,0)",0.85:"yellow",1.0:"rgb(255,0,0)"},max:60,draw:'heatmap'},
+	'GONGXU':{size:13,gradient:{0.15:"rgb(0,0,255)",0.45:"rgb(0,255,0)",0.75:"yellow",1.0:"rgb(255,0,0)"},max:60,draw:'heatmap'},
 	'LUJING':{strokeStyle:'rgba(50, 50, 255, 0.8)',lineWidth:0.05,globalCompositeOperation:'lighter',draw:'simple'}
 };
 //地图的自定义样式 	

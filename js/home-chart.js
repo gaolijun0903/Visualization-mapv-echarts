@@ -234,6 +234,7 @@ var cityRankArr = [
 fuwuChart.on('click', function (params) {
 	console.log(params.dataIndex)
 	var cityshort = cityRankArr[params.dataIndex]['short'] ;
+	var name = cityRankArr[params.dataIndex]['name'] ;
 	window.location.href = './city.html?cityshort='+cityshort;
 });
 
