@@ -12,7 +12,7 @@ var cityInfo = {
 }
 var citylng = cityInfo[cityshort].lng; //获取城市经度
 var citylat = cityInfo[cityshort].lat; //获取城市纬度
-console.log(cityshort,citylng,citylat);
+//console.log(cityshort,citylng,citylat);
 //初始化地图及图层
 CityMaps.init(citylng,citylat);
 
@@ -46,7 +46,7 @@ var apiUrl = {
 setDataFn();
 function setDataFn(){
 	var layerTag = CityMaps.layerTag;
-	console.log('layerTag'+layerTag);
+	//console.log('layerTag'+layerTag);
 	var url = '';
 	var mapOption1 = null;
 	var mapOption2 = null;
@@ -156,7 +156,6 @@ function  yunliFn(rs,mapOption1,mapOption2){
 	var data = [];
     var timeData = [];
     rs = rs.split("\n");
-    console.log(rs.length);
     var maxLength = 0;
     for (var i = 0; i < rs.length; i++) {
         var item = rs[i].split(',');
@@ -193,40 +192,54 @@ function  yunliFn(rs,mapOption1,mapOption2){
 //头部时间的动态显示
 //Utils.minuteTimer($('#time-show'));
 //左侧数据的动态变化效果
-
-
 //updateLeftDatas(cityshort);
-function updateLeftDatas(cityshort){
+function updateLeftDatas1(cityshort){
+	var url = "http://rap2api.taobao.org/app/mock/12662/map/big_number?city=bj&timestamp=1525747088"
 	var countUpOptions = {
 		useEasing: false, 
 		useGrouping: true, 
-		separator: ',', 
-		decimal: '.', 
+		separator: ',' 
 	};
 	
+	var countUpDomArr = $('.data-number'); //左侧六个数据的Dom容器数组
+	var countUpObjArr = []; //用于存放6个countUp对象的数组
+//	setInterval(function(){
+//		getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr);
+//	},3000)
+	getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr);
+}
+//左侧6个数的，请求接口
+function getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr){
 	$.ajax({
 		type:"get",
-		url:"",
-		async:true
-	});
-	var startArr =[1000, 1000, 1000, 1000, 1000, 1000] ;  //虚拟数据
-	var endArr =[1005, 1005, 1005, 1005, 1005, 1005] ;  //虚拟数据
-	// 0--平台当日创建订单量；1--平台当日完成订单量； 2--平台累计里程_公里； 3--平台累计服务时长_小时； 4--平台实时需求量 ； 5--平台实时运力
-	var countUpIdArr = ['tody-create-orders','tody-complete-orders','total-mileages','total-service-duration','current-quantity-demand','current-transport']
-	for(var i=0; i<countUpIdArr.length; i++){
-		var item = endArr[i];
-		var demoName = new CountUp(countUpIdArr[i], startArr[i], endArr[i], 0, 5, countUpOptions);
-		if (!demoName.error) {
-			(function(i){
-				demoName.start(function(){
-					endArr[i] += 200;
-					this.update(endArr[i]);
-				})
-			})(i);
-		} else {
-			console.error(demoName.error);
+		url:url,
+		async:true,
+		success:function(res){
+			if(res.ret_code==1000){
+				var startArr = res.data.before;
+				var endArr = res.data.current;
+				if(countUpObjArr.length==0){//第一次,需创建CountUp对象
+					$.each(countUpDomArr,function(idx,val,arr){
+						var countUpObj = new CountUp(val.id, startArr[idx], endArr[idx], 0, 4, countUpOptions);
+						if (!countUpObj.error) {
+							countUpObjArr.push(countUpObj);
+						} else {
+							console.error(countUpObj.error);
+						}
+					})
+				}else if(countUpObjArr.length==6){//后续定时更新数据
+					$.each(countUpDomArr,function(idx,val,arr){
+						countUpObjArr[idx].update(endArr[idx])
+					})
+				}else{
+					console.log('创建CountUp对象异常);
+				}
+			}else{
+				console.log(res.ret_code)
+			}
+		},
+		error:function(err){
+			console.log(err)	
 		}
-	}
+	});
 }
-
-

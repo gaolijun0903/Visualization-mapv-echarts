@@ -44,7 +44,7 @@ var yunliOption = option = {
             data : (function(){
 	        		var res = [];
 	        		var d = new Date().getHours();
-	        		console.log(d);
+	        		//console.log(d);
 	        		for (var i=d; i<24; i++){
 	        			res.push(i);
 	        		}
@@ -159,7 +159,7 @@ var gongxuOption = {
         data: (function(){
         		var res = [];
         		var d = new Date().getHours();
-        		console.log(d);
+        		//console.log(d);
         		for (var i=d; i<24; i++){
         			res.push(i);
         		}

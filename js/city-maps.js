@@ -76,7 +76,7 @@ var CityMaps = {
         }
         // 更新options
         if(options1){
-        		console.log(this.mapLayers[0].mapvLayer.options)
+        		//console.log(this.mapLayers[0].mapvLayer.options)
 	        this.mapLayers[0].mapvLayer.setOptions(
 				 options1
 			);
