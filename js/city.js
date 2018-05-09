@@ -21,20 +21,12 @@ $('.tab-item').click(function(p){
 	$(this).addClass('tab-item-active').siblings().removeClass('tab-item-active');
 	var thisId = $(this)[0].id;
 	if(thisId=='tab-xingyun'){ //1--星云图
-		$('#subtab-list-gongxu').hide();   //供需热力图的 二级切换按钮
-		$('#subtab-list-xingyun').show();	//星云图的 二级切换按钮
 		CityMaps.layerTag = layerTag.XINGYUN;
 	}else if(thisId=='tab-yunli'){  //2--运力状态   //该效果需要两个图层（点、路线）
-		$('#subtab-list-gongxu').hide();
-		$('#subtab-list-xingyun').hide();
 		CityMaps.layerTag = layerTag.YUNLI;
 	}else if(thisId=='tab-gongxu'){  //3--供需热力
-		$('#subtab-list-xingyun').hide();
-		$('#subtab-list-gongxu').show();  //供需热力图的 二级切换按钮
 		CityMaps.layerTag = layerTag.GONGXU;
 	}else if(thisId=='tab-lujing'){ //4--路径经脉
-		$('#subtab-list-gongxu').hide();
-		$('#subtab-list-xingyun').hide();
 		CityMaps.layerTag = layerTag.LUJING;
 	} 
 	setDataFn();
@@ -201,6 +193,8 @@ function  yunliFn(rs,mapOption1,mapOption2){
 //头部时间的动态显示
 //Utils.minuteTimer($('#time-show'));
 //左侧数据的动态变化效果
+
+
 //updateLeftDatas(cityshort);
 function updateLeftDatas(cityshort){
 	var countUpOptions = {
@@ -209,11 +203,16 @@ function updateLeftDatas(cityshort){
 		separator: ',', 
 		decimal: '.', 
 	};
+	
+	$.ajax({
+		type:"get",
+		url:"",
+		async:true
+	});
 	var startArr =[1000, 1000, 1000, 1000, 1000, 1000] ;  //虚拟数据
 	var endArr =[1005, 1005, 1005, 1005, 1005, 1005] ;  //虚拟数据
-	//  0--创建订单量, 1--当前服务量, 2--当前里程数, 3--服务时长, 4--需求量, 5--当前运力
-	var countUpIdArr = ['create-order','current-service','current-mileage','service-duration','quantity-demand','current-transport']
-	
+	// 0--平台当日创建订单量；1--平台当日完成订单量； 2--平台累计里程_公里； 3--平台累计服务时长_小时； 4--平台实时需求量 ； 5--平台实时运力
+	var countUpIdArr = ['tody-create-orders','tody-complete-orders','total-mileages','total-service-duration','current-quantity-demand','current-transport']
 	for(var i=0; i<countUpIdArr.length; i++){
 		var item = endArr[i];
 		var demoName = new CountUp(countUpIdArr[i], startArr[i], endArr[i], 0, 5, countUpOptions);
