@@ -117,7 +117,7 @@ function setDataFn(){
 //临时构造数据
 function xingyunFn(mapOption1,mapOption2){
 	var data = [];
-	var randomCount = 300;
+	var randomCount = 1000;
     var citys = ["北京","天津","上海","重庆","石家庄","太原","呼和浩特","哈尔滨","长春","沈阳","济南","南京","合肥","杭州","南昌","福州","郑州","武汉","长沙","广州","南宁","西安","银川","兰州","西宁","乌鲁木齐","成都","贵阳","昆明","拉萨","海口"];
     // 构造数据
     while (randomCount--) {
@@ -127,8 +127,8 @@ function xingyunFn(mapOption1,mapOption2){
                 type: 'Point',
                 coordinates: [cityCenter.lng - 2 + Math.random() * 4, cityCenter.lat - 2 + Math.random() * 4]
             },
-            count: 30 * Math.random(),
-            time: 100 * Math.random()
+            
+            time: 10 * Math.random()
         });
     }
     CityMaps.updateLayerData(data,'',mapOption1,mapOption2)
@@ -146,7 +146,7 @@ function gongxuFn(mapOption1,mapOption2){
                 coordinates: [cityCenter.lng - 2 + Math.random() * 4, cityCenter.lat - 2 + Math.random() * 4]
             },
             count: 30 * Math.random(),
-            time: 100 * Math.random()
+            time: 10 * Math.random()
         });
     }
     CityMaps.updateLayerData(data,'',mapOption1,mapOption2)
@@ -170,8 +170,7 @@ function  yunliFn(rs,mapOption1,mapOption2){
                     type: 'Point',
                     coordinates: [item[j], item[j + 1]]
                 },
-                count: 1,
-                time: j
+                time: j/10
             });
         }
         data.push({
@@ -232,7 +231,7 @@ function getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr){
 						countUpObjArr[idx].update(endArr[idx])
 					})
 				}else{
-					console.log('创建CountUp对象异常);
+					console.log('创建CountUp对象异常');
 				}
 			}else{
 				console.log(res.ret_code)

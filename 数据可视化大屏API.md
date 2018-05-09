@@ -249,13 +249,15 @@ http://rap2api.taobao.org/app/mock/12662/map/supply_demand_group?city=bj&timesta
         geometry: {
             type: 'Point',
             coordinates: [116.412878, 40.075240]
-        }
+        },
+        count: 30
    	},
     {
         geometry: {
             type: 'Point',
             coordinates: [116.412878, 40.075240]
-        }
+        },
+        count: 50
    }
 ]
 
@@ -311,13 +313,15 @@ http://rap2api.taobao.org/app/mock/12662/map/supply_demand_group?city=bj&timesta
         geometry: {
             type: 'Point',
             coordinates: [116.412878, 40.075240]
-        }
+        },
+        count: 30
    	},
     {
         geometry: {
             type: 'Point',
             coordinates: [116.412878, 40.075240]
-        }
+        },
+        count: 50
    }
 ]
 

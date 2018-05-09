@@ -5,15 +5,15 @@ var gongxuChart = echarts.init(document.getElementById('gongxu'));
 // 指定图表的配置项和数据
 var yunliOption = option = {
     title: {
-        text: '堆叠区域图',
+        text: '城市订单分布',
         textStyle: {
         	color:'#0ED7F9',
         	fontSize:'18'
         }
     },
     legend: {
-    		width:185,
-    		x:'right',
+		width:185,
+		x:'right',
         y:'top',
         itemWidth:14,
         itemHeight:10,
