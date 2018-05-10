@@ -1,4 +1,21 @@
 var Utils = {
+	timeArr12:function(){//生成当前时间的前十二个小时的数组，用于图表的时间坐标轴
+		var res = [];
+		var d = new Date().getHours();
+		if(d>=12){
+			for (var i=d-12; i<d; i++){
+    			res.push(i);
+    		}
+		}else{
+			for (var i=d+12; i<24; i++){
+    			res.push(i);
+    		}
+    		for(var i=0; i<d; i++){
+    			res.push(i);
+    		}
+		}
+		return res;
+    },
 	minuteTimer:function($dom){
 		var str = this.timeFormater();
 		$dom.html(str);
