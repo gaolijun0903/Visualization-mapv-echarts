@@ -1,5 +1,5 @@
 //获取城市简码
-var cityshort = Utils.getQueryString('cityshort') || 'bj';
+var cityshort = Utils.getQueryString('cityshort') || 'sh';
 var cityInfo = {
 	'bj':{lng:116.4136103013,lat:39.9110666857},
 	'sh':{lng:121.4803295328,lat:31.2363429624},
@@ -14,27 +14,33 @@ var citylng = cityInfo[cityshort].lng; //获取城市经度
 var citylat = cityInfo[cityshort].lat; //获取城市纬度
 console.log(cityshort,citylng,citylat);
 //初始化地图及图层
-CityMaps.init(cityshort,citylng,citylat);
+var cityMaps = new CityMaps(cityshort,citylng,citylat);
+cityMaps.init();
+
+//初始化图标数据
+var cityCharts = new CityCharts(cityshort,'yunli','gongxu');
+cityCharts.init();
 
 //右上方的切换按钮点击事件
 $('.tab-item').click(function(p){
 	$(this).addClass('tab-item-active').siblings().removeClass('tab-item-active');
 	var thisId = $(this)[0].id;
 	if(thisId=='tab-xingyun'){ //1--星云图
-		CityMaps.switchLayer('xingyun');
+		cityMaps.switchLayer('xingyun');
 	}else if(thisId=='tab-yunli'){  //2--运力状态   //该效果需要两个图层（点、路线）
-		CityMaps.switchLayer('yunli');
+		cityMaps.switchLayer('yunli');
 	}else if(thisId=='tab-gongxu'){  //3--供需热力
-		CityMaps.switchLayer('gongxu');
+		cityMaps.switchLayer('gongxu');
 	}else if(thisId=='tab-lujing'){ //4--路径经脉
-		CityMaps.switchLayer('lujing');
+		cityMaps.switchLayer('lujing');
 	} 
 })
 
 
 //setInterval(setDataFn, 3000)
 function setDataFn(){
-	CityMaps.updateLayerData();
+	cityMaps.updateLayerData();
+	cityCharts.updateData();
 }
 
 

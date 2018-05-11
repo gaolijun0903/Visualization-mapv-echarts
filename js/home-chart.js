@@ -7,67 +7,95 @@ var gongxuChart = echarts.init(document.getElementById('gongxu'));
 
 // 指定图表的配置项和数据
 var yunliOption = {
-    title : {
-        text: '平台运力分布',
+    title: {
+        text: '城市订单分布',
         textStyle: {
         	color:'#0ED7F9',
         	fontSize:'18'
-        },
-        x:'left'
-    },
-    tooltip: {
-        trigger: 'item',
-        formatter: "{a} <br/>{b}: {c} ({d}%)"
+        }
     },
     legend: {
-        orient: 'vertical',
-        x:'right',
-        y:'middle',
+		width:185,
+		x:'right',
+        y:'top',
         itemWidth:14,
-        itemHeight:14,
+        itemHeight:10,
         textStyle: {
-	        	color:'#96DCFA',
-	        	fontSize:'14'
+        	color:'#96DCFA',
+        	fontSize:'14'
         },
         data:['易达','舒适','商务','豪华','其他']
     },
-    series: [
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis : [
         {
-            name:'平台运力分布',
-            type:'pie',
-            center: ['40%', '58%'],
-            radius: ['40%', '60%'],
-            avoidLabelOverlap: false,
-            label: {
-                normal: {
-                    formatter: '{d}%'
-                },
-                emphasis: {
-                    show: true,
-                    textStyle: {
-                        fontSize: '14',
-                        fontWeight: 'bold'
-                    }
-                }
-            },
-            labelLine:{//标签的视觉引导线样式
-            		length:5,
-            		length2:3
-            },
-            data:[
-                {value:335, name:'易达'},
-                {value:310, name:'舒适'},
-                {value:234, name:'商务'},
-                {value:135, name:'豪华'},
-                {value:548, name:'其他'}
-            ],
-            itemStyle: {
-                emphasis: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }
+            type : 'category',
+            boundaryGap : false,
+            axisLine: {
+	            lineStyle: {
+	                color: 'rgba(255,255,255,0.50)'
+	            }
+	        },
+	        axisLabel:{
+        		color: '#99E1FF'
+	        },
+            data : Utils.timeArr12()
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+	        axisLine: {
+	            lineStyle: {
+	                color: 'rgba(255,255,255,0.50)'
+	            }
+	        },
+	        axisLabel:{
+        		color: '#99E1FF',
+        		formatter: '{value} K'
+	        }
+        }
+    ],
+    series : [   
+        {
+            name:'易达',
+            type:'line',
+            stack: '总量',
+            areaStyle: {normal: {}},
+            data:[]
+        },
+        {
+            name:'舒适',
+            type:'line',
+            stack: '总量',
+            areaStyle: {normal: {}},
+            data:[]
+        },
+        {
+            name:'商务',
+            type:'line',
+            stack: '总量',
+            areaStyle: {normal: {}},
+            data:[]
+        },
+        {
+            name:'豪华',
+            type:'line',
+            stack: '总量',
+            areaStyle: {normal: {}},
+            data:[]
+        },
+        {
+            name:'其他',
+            type:'line',
+            stack: '总量',
+            areaStyle: {normal: {}},
+            data:[]
         }
     ],
     color:['#E1C667','#EE4A6E','#56A1D5','#D16BAB','#87DDE1']

@@ -352,3 +352,9 @@ http://rap2api.taobao.org/app/mock/12662/map/supply_demand_group?city=bj&timesta
             }
         }
     ]
+    
+
+1\四个角的去掉
+2、右侧3个部分的高度做成自适应的
+3、返回的图标换一下
+4、左侧的6个数据也改成自适应
