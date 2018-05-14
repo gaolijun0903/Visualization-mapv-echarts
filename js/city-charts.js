@@ -91,7 +91,7 @@ var OrderOption = {
             data:[]
         }
     ],
-    color:['#E1C667','#EE4A6E','#56A1D5','#D16BAB','#87DDE1']
+    color:['#E1C667','#D16BAB','#56A1D5','#EE4A6E','#87DDE1']
 };
 
 var GongxuOption = {

@@ -15,7 +15,11 @@ var citylat = cityInfo[cityshort].lat; //获取城市纬度
 console.log(cityshort,citylng,citylat);
 //初始化地图及图层
 var cityMaps = new CityMaps(cityshort,citylng,citylat);
-cityMaps.init();
+cityMaps.init(function(){
+	console.log('地图初始化完成')
+	$('.tab-list').removeClass('disable');
+	$('.tab-item').first().addClass('tab-item-active');
+});
 
 //初始化图标数据
 var cityCharts = new CityCharts(cityshort,'yunli','gongxu');
@@ -23,6 +27,7 @@ cityCharts.init();
 
 //右上方的切换按钮点击事件
 $('.tab-item').click(function(p){
+	if(!cityMaps.allOver){return}
 	$(this).addClass('tab-item-active').siblings().removeClass('tab-item-active');
 	var thisId = $(this)[0].id;
 	if(thisId=='tab-xingyun'){ //1--星云图

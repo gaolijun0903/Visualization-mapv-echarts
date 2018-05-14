@@ -30,6 +30,9 @@
             font-size: 30px;
     		line-height: 60px;
         }
+        #tab.active{
+        	color: yellow;
+        }
     </style>
 </head>
 <body>
@@ -153,21 +156,32 @@ var Layers = {
 	gongxuLayer:'',
 	lujingLayer:''
 };
+
+var allOver = false;
 function init(){
+	$.when(xingyun(), yunli(), gongxu(),lujing())
+	.then(function(data1, data2, data3,data4){
+	    console.log('全部执行完成');
+	    console.log(data1, data2, data3,data4);
+	    $('#tab').addClass('active');
+	    allOver = true;
+	});
+}
+init();
+
+function update(){
 	xingyun();
 	yunli();
 	gongxu();
 	lujing();
 }
-init();
 
-/*$.when(runAsync(), runAsync2(), runAsync3())
-.then(function(data1, data2, data3){
-    console.log('全部执行完成');
-    console.log(data1, data2, data3);
-});*/
+//setInterval(function(){
+//	update();
+//},6000)
 
 $('#tab1').click(function(){
+	if(!allOver){return}
 	Layers.xingyunLayer.show();
 	Layers.yunliLayer1.hide();
 	Layers.yunliLayer2.hide();
@@ -176,6 +190,7 @@ $('#tab1').click(function(){
 	
 })
 $('#tab2').click(function(){
+	if(!allOver){return}
 	Layers.xingyunLayer.hide();
 	Layers.yunliLayer1.show();
 	Layers.yunliLayer2.show();
@@ -184,6 +199,7 @@ $('#tab2').click(function(){
 	
 })
 $('#tab3').click(function(){
+	if(!allOver){return}
 	Layers.xingyunLayer.hide();
 	Layers.yunliLayer1.hide();
 	Layers.yunliLayer2.hide();
@@ -192,6 +208,7 @@ $('#tab3').click(function(){
 	
 })
 $('#tab4').click(function(){
+	if(!allOver){return}
 	Layers.xingyunLayer.hide();
 	Layers.yunliLayer1.hide();
 	Layers.yunliLayer2.hide();
@@ -201,16 +218,22 @@ $('#tab4').click(function(){
 })
 
 
-
-
 function xingyun(){
-	var data = createData();
-    var dataSet = new mapv.DataSet(data);
-    Layers.xingyunLayer = new mapv.baiduMapLayer(map, dataSet, MapOptions.XINGYUN);
-    Layers.xingyunLayer.hide();
+	var def = $.Deferred();
+	 //做一些异步操作
+    setTimeout(function(){
+    	var data = createData();
+	    var dataSet = new mapv.DataSet(data);
+	    Layers.xingyunLayer = new mapv.baiduMapLayer(map, dataSet, MapOptions.XINGYUN);
+	    Layers.xingyunLayer.hide();
+        console.log('1执行完成');
+        def.resolve('1随便什么数据');
+    }, 2500);
+	return def;	
 }
   
 function yunli(){
+	var def = $.Deferred();
 	$.get('static/wuhan-car.js', function (rs) {
         var data = [];
         var timeData = [];
@@ -244,23 +267,36 @@ function yunli(){
         var dataSet2 = new mapv.DataSet(timeData);
         Layers.yunliLayer2 = new mapv.baiduMapLayer(map, dataSet2, MapOptions.YUNLI2);
     	Layers.yunliLayer2.hide();
+    	console.log('2执行完成');
+        def.resolve('2随便什么数据');
     });
+	return def;
 }
 
 function gongxu(){
-	var data = createData();
-    var dataSet = new mapv.DataSet(data);
-    Layers.gongxuLayer = new mapv.baiduMapLayer(map, dataSet, MapOptions.GONGXU);
-    Layers.gongxuLayer.hide();
+	var def = $.Deferred();
+	 //做一些异步操作
+    setTimeout(function(){
+    	var data = createData();
+	    var dataSet = new mapv.DataSet(data);
+	    Layers.gongxuLayer = new mapv.baiduMapLayer(map, dataSet, MapOptions.GONGXU);
+	    Layers.gongxuLayer.hide();
+        console.log('3执行完成');
+        def.resolve('3随便什么数据');
+    }, 1000);
+	return def;	
 }
 
 function lujing(){
+	var def = $.Deferred();
 	$.get('static/car.json', function(csvstr) {
         var dataSet = new mapv.DataSet(csvstr);
         Layers.lujingLayer = new mapv.baiduMapLayer(map, dataSet, MapOptions.LUJING);
     	Layers.lujingLayer.hide();
-
+		console.log('4执行完成');
+        def.resolve('4随便什么数据');
    });
+   return def;	
 }
 
 function createData(){

@@ -27,6 +27,7 @@
 	margin-right: 0.18rem;
 	width: 0.4rem;
 	height: 0.4rem;
+	cursor:pointer;
 	background-image: url(../img/back1.png);
 	background-size:100% 100%;
 }
@@ -55,7 +56,6 @@
 	width: 100%;
 	height: 100%;
 }
-
 
 .left-container{
 	position: absolute;
@@ -101,9 +101,6 @@
 	font-size: 0.36rem;
 }
 
-
-
-
 .right-container{
 	position: absolute;
 	top: 0;
@@ -111,7 +108,6 @@
 	width: 3.4rem;
 	height: 100%;
 	z-index: 10;
-	/*border: 1px solid deepskyblue;*/
 }
 .right-container .right-cell-container {
 	width: 3.2rem;
@@ -124,7 +120,6 @@
 	margin: 0.33rem 0 0 -1.2rem;
     padding: 0;
     width: 4.4rem;
-    /*height: 0.80rem;*/
 }
 .right-container .right-middle-container{
 	margin-top: 0.31rem ;
@@ -178,8 +173,15 @@
 .right-container .echart-box .tab-list .tab-item{
 	flex: 1;
 	font-size: 0.16rem;
+	text-align: center;
 	color: #0FD9F8;
 	letter-spacing: 0;
+	cursor:pointer;
+}
+.right-container .echart-box .tab-list.disable .tab-item{
+	color: #ccc;
+	cursor:	wait;
+	/*cursor:not-allowed;*/
 }
 .right-container .echart-box .tab-list .tab-item .tab-item-inner{
 	display: inline-block;

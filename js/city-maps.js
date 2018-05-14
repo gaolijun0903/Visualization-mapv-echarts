@@ -114,11 +114,12 @@ function CityMaps (cityshort,lng,lat) {
 		'GONGXU': this.urlDomain+ ''+this.urlQuery,  //热力图---构造
 		'LUJING': this.urlDomain+ ''+this.urlQuery   //直接可用
 	};
+	this.allOver = false;
 }
 
-CityMaps.prototype.init = function(){
+CityMaps.prototype.init = function(cb){
 	this.initBmap(this.lng,this.lat);
-	this.initLayers();
+	this.initLayers(cb);
 };
 CityMaps.prototype.initBmap = function(lng,lat){
 	this.map = new BMap.Map("map", { enableMapClick: false}); // 创建地图实例  
@@ -126,11 +127,17 @@ CityMaps.prototype.initBmap = function(lng,lat){
 	this.map.enableScrollWheelZoom(true);  // 开启鼠标滚轮缩放
 	this.map.setMapStyle(MapStyle);  // 设置地图的自定义样式 
 };
-CityMaps.prototype.initLayers= function(){ //初始化图层
-	this.xingyun();
-	this.yunli();
-	this.gongxu();
-	this.lujing();
+CityMaps.prototype.initLayers = function(cb){ //初始化图层
+	var self = this;
+	$.when(this.xingyun(), this.yunli(), this.gongxu(), this.lujing())
+	.then(function(data1, data2, data3,data4){
+	    console.log('全部执行完成');
+	    self.allOver = true;
+	    self.switchLayer('xingyun');
+	    if(cb){//如果有回调函数，执行
+	    	cb();
+	    }
+	});
 };
 CityMaps.prototype.updateLayerData= function(){ //更新数据
 	this.xingyun(true);
@@ -171,21 +178,28 @@ CityMaps.prototype.switchLayer=function(layerTag){
 	}
 };
 CityMaps.prototype.xingyun=function (isUpdate){ //星云图
-	//console.log(this.apiUrl);
 	var self = this;
-	var data = this.createData();
-	if(isUpdate){// 更新数据
-		console.log('xingyun--update');
-    	self.Layers.xingyunLayer.dataSet.set(data);
-    	return
-	}
-	console.log('xingyun--init');
-    var dataSet = new mapv.DataSet(data);
-    self.Layers.xingyunLayer = new mapv.baiduMapLayer(self.map, dataSet, self.mapLayerOptions.XINGYUN);
-    self.Layers.xingyunLayer.hide();
+	var def = $.Deferred();
+	 //做一些异步操作
+    setTimeout(function(){
+    	var data = self.createData();
+		if(isUpdate){// 更新数据
+			console.log('xingyun--update');
+	    	self.Layers.xingyunLayer.dataSet.set(data);
+	    	return
+		}
+		console.log('xingyun--init');
+	    var dataSet = new mapv.DataSet(data);
+	    self.Layers.xingyunLayer = new mapv.baiduMapLayer(self.map, dataSet, self.mapLayerOptions.XINGYUN);
+	    self.Layers.xingyunLayer.hide();
+        console.log('1xingyun-执行完成');
+        def.resolve('1xingyun数据');
+    }, 500);
+	return def;	
 };
 CityMaps.prototype.yunli=function (isUpdate){ //运力图
 	var self = this;
+	var def = $.Deferred();
 	$.get('static/wuhan-car.js', function (rs) {
         var data = [];
         var timeData = [];
@@ -211,7 +225,6 @@ CityMaps.prototype.yunli=function (isUpdate){ //运力图
                 }
             });
         }
-        
 		if(isUpdate){// 更新数据
 			console.log('yunli--update');
         	self.Layers.yunliLayer1.dataSet.set(data);
@@ -226,23 +239,36 @@ CityMaps.prototype.yunli=function (isUpdate){ //运力图
         var dataSet2 = new mapv.DataSet(timeData);
         self.Layers.yunliLayer2 = new mapv.baiduMapLayer(self.map, dataSet2, self.mapLayerOptions.YUNLI2);
     	self.Layers.yunliLayer2.hide();
+    	
+    	console.log('2yunli-执行完成');
+        def.resolve('2yunli数据');
     });
+	return def;	
 };
 CityMaps.prototype.gongxu=function (isUpdate){//供需热力图
 	var self = this;
-	var data = this.createData();
-	if(isUpdate){// 更新数据
-		console.log('gongxu--update');
-    	self.Layers.gongxuLayer.dataSet.set(data);
-    	return
-	}
-	console.log('gongxu--init');
-    var dataSet = new mapv.DataSet(data);
-    self.Layers.gongxuLayer = new mapv.baiduMapLayer(self.map, dataSet, self.mapLayerOptions.GONGXU);
-    self.Layers.gongxuLayer.hide();
+	var def = $.Deferred();
+	 //做一些异步操作
+    setTimeout(function(){
+    	var data = self.createData();
+		if(isUpdate){// 更新数据
+			console.log('gongxu--update');
+	    	self.Layers.gongxuLayer.dataSet.set(data);
+	    	return
+		}
+		console.log('gongxu--init');
+	    var dataSet = new mapv.DataSet(data);
+	    self.Layers.gongxuLayer = new mapv.baiduMapLayer(self.map, dataSet, self.mapLayerOptions.GONGXU);
+	    self.Layers.gongxuLayer.hide();
+        console.log('3-gongxu执行完成');
+        def.resolve('3-gongxu数据');
+    }, 2500);
+	return def;	
+		
 };
 CityMaps.prototype.lujing=function (isUpdate){ //路径脉络图
 	var self = this;
+	var def = $.Deferred();
 	$.get('static/car.json', function(csvstr) {
 		var data = csvstr;
 		if(isUpdate){// 更新数据
@@ -254,8 +280,10 @@ CityMaps.prototype.lujing=function (isUpdate){ //路径脉络图
         var dataSet = new mapv.DataSet(data);
         self.Layers.lujingLayer = new mapv.baiduMapLayer(self.map, dataSet, self.mapLayerOptions.LUJING);
     	self.Layers.lujingLayer.hide();
-
+		console.log('4-lujing执行完成');
+        def.resolve('4-lujing数据');
    });
+   return def;	
 };
 CityMaps.prototype.createData=function (){// 点数据构造数据
   	var randomCount = 1000;
