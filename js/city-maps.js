@@ -1,9 +1,3 @@
-var layerTag = {
-	'XINGYUN': 'xingyun',
-	'YUNLI': 'yunli',
-	'GONGXU': 'gongxu',
-	'LUJING': 'lujing'
-}
 
 //mapv图层配置
 var MapLayerOptions = {
@@ -93,31 +87,30 @@ var MapStyle = {
 }
 
 function CityMaps (cityshort,lng,lat) {
-	this.map = null;
-	this.cityshort = cityshort;
-	this.lng = lng;
-	this.lat = lat;
-	this.Layers = {
-		xingyunLayer:'',
-		yunliLayer1:'',
-		yunliLayer2:'',
-		gongxuLayer:'',
-		lujingLayer:''
+	this.map = null; //地图对象
+	this.cityshort = cityshort;  //城市简称
+	this.lng = lng;  //经度
+	this.lat = lat;  //纬度
+	this.Layers = {  //地图图层
+		xingyunLayer:'', //星云图-图层
+		yunliLayer1:'', //运力图-图层1--路线层
+		yunliLayer2:'', //运力图-图层2--定位点层
+		gongxuLayer:'', //供需热力图-图层
+		lujingLayer:'' //路径脉络-图层
 	};
-	this.mapLayerOptions= MapLayerOptions;
-	this.layerTag= layerTag.XINGYUN;
-	this.urlDomain = 'https://';
-	this.urlQuery = '?city='+cityshort+'&timestamp='+new Date().getTime();
-	this.apiUrl = {
-		'XINGYUN':this.urlDomain+ ''+this.urlQuery, //蓝点--自己构造
-		'YUNLI1': this.urlDomain+ ''+this.urlQuery,
-		'GONGXU': this.urlDomain+ ''+this.urlQuery,  //热力图---构造
-		'LUJING': this.urlDomain+ ''+this.urlQuery   //直接可用
+	this.mapLayerOptions = MapLayerOptions; //各图层基本配置信息
+	this.urlDomain = 'https://10.0.11.41:9999/visual';  //图层数据接口的域名
+	this.urlQuery = '/'+cityshort+'/'+Utils.timestamp(); //图层数据接口的请求参数
+	this.apiUrl = { //各图层数据接口
+		'XINGYUN':this.urlDomain+ 'xingyun' +this.urlQuery, //蓝点--自己构造
+		'YUNLI': this.urlDomain+ 'yunli' +this.urlQuery,
+		'GONGXU': this.urlDomain+ 'gongxu' +this.urlQuery,  //热力图---构造
+		'LUJING': this.urlDomain+ 'lujing' +this.urlQuery   //直接可用
 	};
-	this.allOver = false;
+	this.allDataOver = false;  //是否全部图层的数据都加载完毕
 }
 
-CityMaps.prototype.init = function(cb){
+CityMaps.prototype.init = function(cb){ //初始化地图实例和图层
 	this.initBmap(this.lng,this.lat);
 	this.initLayers(cb);
 };
@@ -127,13 +120,14 @@ CityMaps.prototype.initBmap = function(lng,lat){
 	this.map.enableScrollWheelZoom(true);  // 开启鼠标滚轮缩放
 	this.map.setMapStyle(MapStyle);  // 设置地图的自定义样式 
 };
-CityMaps.prototype.initLayers = function(cb){ //初始化图层
+CityMaps.prototype.initLayers = function(cb){ //初始化图层，支持参数-全部图层创建完成后的回调函数
 	var self = this;
+	//$.when用来并行运行多个异步任务
 	$.when(this.xingyun(), this.yunli(), this.gongxu(), this.lujing())
 	.then(function(data1, data2, data3,data4){
-	    console.log('全部执行完成');
-	    self.allOver = true;
-	    self.switchLayer('xingyun');
+	    //console.log('全部执行完成');
+	    self.allDataOver = true;  //全部图层的数据都加载完毕
+	    self.switchLayer('xingyun');  //默认显示星云图显示
 	    if(cb){//如果有回调函数，执行
 	    	cb();
 	    }
@@ -145,7 +139,7 @@ CityMaps.prototype.updateLayerData= function(){ //更新数据
 	this.gongxu(true);
 	this.lujing(true);
 };
-CityMaps.prototype.switchLayer=function(layerTag){
+CityMaps.prototype.switchLayer=function(layerTag){//图层切换--参数
 	switch(layerTag){
 		case 'xingyun':
 			this.Layers.xingyunLayer.show();
@@ -177,34 +171,33 @@ CityMaps.prototype.switchLayer=function(layerTag){
 			break;
 	}
 };
-CityMaps.prototype.xingyun=function (isUpdate){ //星云图
+CityMaps.prototype.xingyun=function (isUpdate){ //星云图，参数-是用来 初始化or更新
 	var self = this;
 	var def = $.Deferred();
-	 //做一些异步操作
+	//console.log(this.apiUrl.XINGYUN)
     setTimeout(function(){
     	var data = self.createData();
 		if(isUpdate){// 更新数据
-			console.log('xingyun--update');
 	    	self.Layers.xingyunLayer.dataSet.set(data);
 	    	return
 		}
-		console.log('xingyun--init');
 	    var dataSet = new mapv.DataSet(data);
 	    self.Layers.xingyunLayer = new mapv.baiduMapLayer(self.map, dataSet, self.mapLayerOptions.XINGYUN);
 	    self.Layers.xingyunLayer.hide();
-        console.log('1xingyun-执行完成');
+        //console.log('1xingyun-执行完成');
         def.resolve('1xingyun数据');
     }, 500);
-	return def;	
+	return def.promise();	//返回一个受限的Deferred对象
 };
 CityMaps.prototype.yunli=function (isUpdate){ //运力图
 	var self = this;
 	var def = $.Deferred();
+	//console.log(this.apiUrl.YUNLI)
 	$.get('static/wuhan-car.js', function (rs) {
         var data = [];
         var timeData = [];
         rs = rs.split("\n");
-        console.log(rs.length);
+        //console.log(rs.length);
         for (var i = 0; i < rs.length; i++) {
             var item = rs[i].split(',');
             var coordinates = [];
@@ -226,12 +219,10 @@ CityMaps.prototype.yunli=function (isUpdate){ //运力图
             });
         }
 		if(isUpdate){// 更新数据
-			console.log('yunli--update');
         	self.Layers.yunliLayer1.dataSet.set(data);
         	self.Layers.yunliLayer2.dataSet.set(timeData);
         	return
 		}
-		console.log('yunli--init');
         var dataSet1 = new mapv.DataSet(data);
         self.Layers.yunliLayer1 = new mapv.baiduMapLayer(self.map, dataSet1, self.mapLayerOptions.YUNLI1);
     	self.Layers.yunliLayer1.hide();
@@ -240,50 +231,47 @@ CityMaps.prototype.yunli=function (isUpdate){ //运力图
         self.Layers.yunliLayer2 = new mapv.baiduMapLayer(self.map, dataSet2, self.mapLayerOptions.YUNLI2);
     	self.Layers.yunliLayer2.hide();
     	
-    	console.log('2yunli-执行完成');
+    	//console.log('2yunli-执行完成');
         def.resolve('2yunli数据');
     });
-	return def;	
+	return def.promise();	
 };
 CityMaps.prototype.gongxu=function (isUpdate){//供需热力图
 	var self = this;
 	var def = $.Deferred();
-	 //做一些异步操作
+	//console.log(this.apiUrl.GONGXU)
     setTimeout(function(){
     	var data = self.createData();
 		if(isUpdate){// 更新数据
-			console.log('gongxu--update');
 	    	self.Layers.gongxuLayer.dataSet.set(data);
 	    	return
 		}
-		console.log('gongxu--init');
 	    var dataSet = new mapv.DataSet(data);
 	    self.Layers.gongxuLayer = new mapv.baiduMapLayer(self.map, dataSet, self.mapLayerOptions.GONGXU);
 	    self.Layers.gongxuLayer.hide();
-        console.log('3-gongxu执行完成');
+        //console.log('3-gongxu执行完成');
         def.resolve('3-gongxu数据');
     }, 2500);
-	return def;	
+	return def.promise();	
 		
 };
 CityMaps.prototype.lujing=function (isUpdate){ //路径脉络图
 	var self = this;
 	var def = $.Deferred();
+	//console.log(this.apiUrl.LUJING)
 	$.get('static/car.json', function(csvstr) {
 		var data = csvstr;
 		if(isUpdate){// 更新数据
-			console.log('lujing--update');
         	self.Layers.lujingLayer.dataSet.set(data);
         	return
 		}
-		console.log('lujing--init');
         var dataSet = new mapv.DataSet(data);
         self.Layers.lujingLayer = new mapv.baiduMapLayer(self.map, dataSet, self.mapLayerOptions.LUJING);
     	self.Layers.lujingLayer.hide();
-		console.log('4-lujing执行完成');
+		//console.log('4-lujing执行完成');
         def.resolve('4-lujing数据');
    });
-   return def;	
+   return def.promise();	
 };
 CityMaps.prototype.createData=function (){// 点数据构造数据
   	var randomCount = 1000;

@@ -359,3 +359,27 @@ http://rap2api.taobao.org/app/mock/12662/map/supply_demand_group?city=bj&timesta
 3、返回的图标换一下
 4、左侧的6个数据也改成自适应
 5\红色的舒适 和豪华对换一下就可以了
+
+
+参数说明：
+城市：城市首字母(有对应表） 如：北京=bj 全国=china  简称=(bj,sh,gz,sz,wz,fz,hrb,zz)
+时间：秒级时间戳
+
+
+#接口地址
+
+可视化大屏 左侧六个大数字接口
+数字含义分别为： 平台当日创建订单量 平台当日完成订单量 平台累计里程_公里 平台累计服务时长_小时 平台实时运力 平台实时需求量 
+http://172.17.1.58:9999/visual/bignum/{city}/{timestamp}
+
+车型分布
+http://172.17.1.58:9999/visual/carDistribution/{city}/{timestamp}
+
+完成订单城市排名
+http://172.17.1.58:9999/visual/topNOrderByCity/{timestamp}
+
+供需状态折线图
+http://172.17.1.58:9999/visual/supplyDemandStatus/{city}/{timestamp}
+
+星云图
+http://172.17.1.58:9999/visual/starChart/{city}/{timestamp}

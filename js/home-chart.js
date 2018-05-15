@@ -1,17 +1,11 @@
 
-
-// 基于准备好的dom，初始化echarts实例
-var yunliChart = echarts.init(document.getElementById('yunli'));
-var fuwuChart = echarts.init(document.getElementById('fuwu'));
-var gongxuChart = echarts.init(document.getElementById('gongxu'));
-
 // 指定图表的配置项和数据
-var yunliOption = {
+var YunliOption = {
     title: {
         text: '城市订单分布',
         textStyle: {
         	color:'#0ED7F9',
-        	fontSize:'18'
+        	fontSize:'16'
         }
     },
     legend: {
@@ -98,16 +92,15 @@ var yunliOption = {
             data:[]
         }
     ],
-    color:['#E1C667','#EE4A6E','#56A1D5','#D16BAB','#87DDE1']
+    color:['#E1C667','#D16BAB','#56A1D5','#EE4A6E','#87DDE1']
 };
 
-
-var fuwuOption = {
+var FuwuOption = {
     title: {
         text: '平台服务Top8城市',
         textStyle: {
         	color:'#0ED7F9',
-        	fontSize:'18'
+        	fontSize:'16'
         }
     },
     tooltip: {
@@ -157,31 +150,31 @@ var fuwuOption = {
             itemStyle:{//柱条颜色
             		color:'#56A1D5'
             },
-            data: [11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000]
+            data: []
         }
     ]
 };
 
 
 
-var gongxuOption = {
+var GongxuOption = {
     title: {
         text: '平台实时供需状态',
         textStyle: {
         	color:'#0ED7F9',
-        	fontSize:'18'
+        	fontSize:'16'
         }
     },
     tooltip: {},
     legend: {
-    		width:145,
+        width:145,
     		x:'right',
         y:'top',
         itemWidth:14,
         itemHeight:10,
         textStyle: {
-	        	color:'#96DCFA',
-	        	fontSize:'14'
+        	color:'#96DCFA',
+        	fontSize:'14'
         },
         data:['需求','运力']
     },
@@ -199,20 +192,9 @@ var gongxuOption = {
             }
         },
         axisLabel:{
-        		color: '#99E1FF'
+    		color: '#99E1FF'
         },
-        data: (function(){
-        		var res = [];
-        		var d = new Date().getHours();
-        		console.log(d);
-        		for (var i=d; i<24; i++){
-        			res.push(i);
-        		}
-        		for(var i=0; i<d; i++){
-        			res.push(i);
-        		}
-        		return res;
-        })()
+        data: Utils.timeArr12()
     },
     yAxis: {
         type: 'value',
@@ -222,20 +204,20 @@ var gongxuOption = {
             }
         },
         axisLabel:{
-        		color: '#99E1FF',
-        		formatter: '{value} K'
+    		color: '#99E1FF',
+    		formatter: '{value} K'
         }
     },
     series: [
 	    {
-	    		name: '需求',
-	        data: [820, 932, 901, 934, 1290, 1330, 1320,920, 632, 701, 834, 1290, 1530, 1120, 932, 901, 934, 1290, 1330, 1320,920, 632, 701, 834, 1290, 1530, 1120],
+    		name: '需求',
+	        data: [],
 	        type: 'line',
 	        smooth: true
 	    },
 	    {
-	    		name: '运力',
-	        data: [920, 632, 701, 834, 1290, 1530, 1120,820, 932, 901, 934, 1290, 1330, 1320,632, 701, 834, 1290, 1530, 1120,820, 932, 901, 934, 1290, 1330, 1320,1545],
+    		name: '运力',
+	        data: [],
 	        type: 'line',
 	        smooth: true
 	    }
@@ -243,15 +225,9 @@ var gongxuOption = {
     color:['#EE4A6E','#56A1D5']
 };
 
-
-// 使用刚指定的配置项和数据显示图表。
-yunliChart.setOption(yunliOption);
-fuwuChart.setOption(fuwuOption);
-gongxuChart.setOption(gongxuOption);
-
 var cityRankArr = [
 	{id:8,name:'郑州',short:'zz',lng:113.6313915479,lat:34.7533581487},
-	{id:7,name:'哈尔滨',short:'heb',lng:126.5424184340,lat:45.8077839548},
+	{id:7,name:'哈尔滨',short:'hrb',lng:126.5424184340,lat:45.8077839548},
 	{id:6,name:'福建',short:'fj',lng:119.3030722518,lat:26.1059198357},
 	{id:5,name:'温州',short:'wz',lng:120.7058617854,lat:28.0011792279},
 	{id:4,name:'深圳',short:'sz',lng:114.0661345267,lat:22.5485544122},
@@ -259,10 +235,103 @@ var cityRankArr = [
 	{id:2,name:'上海',short:'sh',lng:121.4803295328,lat:31.2363429624},
 	{id:1,name:'北京',short:'bj',lng:116.4136103013,lat:39.9110666857}
 ]
-fuwuChart.on('click', function (params) {
-	console.log(params.dataIndex)
-	var cityshort = cityRankArr[params.dataIndex]['short'] ;
-	window.location.href = './city.html?cityshort='+cityshort;
-});
 
+//图表管理对象
+function mainCharts(cityshort,dom1,dom2,dom3){//0--城市英文缩写，2--订单分布图表的Dom元素的Id，3--供需图表的Dom元素的Id，
+	this.cityshort = cityshort; //城市英文缩写
+	this.dom1 = document.getElementById(dom1);  //订单分布图表的Dom元素
+	this.dom2 = document.getElementById(dom2);  //供需图表的Dom元素
+    this.dom3 = document.getElementById(dom3);
+    this.urlDomain = 'https://10.0.11.41:9999/visual';
+	this.urlQuery = this.cityshort+'/'+Date.parse( new Date() ).toString().substr(0,10);
+	this.urlApi = {//两个图表数据接口地址
+		url_order : this.urlDomain+'/carDistribution/'+this.urlQuery,
+        url_top8 : this.urlDomain+'/topNOrderByCity/'+Date.parse( new Date() ).toString().substr(0,10),
+		url_gongxu : this.urlDomain+'/supplyDemandStatus/'+this.urlQuery
+	};
+	this.orderChart={};
+    this.fuwuChart={};
+    this.gongxuChart={};
+
+	this.options = {  // 指定图表的配置项和数据
+		orderOption:YunliOption,
+        fuwuOption:FuwuOption,
+		gongxuOption:GongxuOption
+	};
+}
+mainCharts.prototype.init = function(){// 基于准备好的dom，初始化echarts实例
+
+	this.orderChart = echarts.init(this.dom1);
+    this.gongxuChart = echarts.init(this.dom2);
+    this.fuwuChart = echarts.init(this.dom3);
+	this.setOption();
+};
+mainCharts.prototype.setOption = function(){// 使用刚指定的配置项和数据显示图表。
+	this.orderChart.setOption(this.options.orderOption);
+	this.fuwuChart.setOption(this.options.fuwuOption);
+    this.gongxuChart.setOption(this.options.gongxuOption);
+};
+mainCharts.prototype.updateData = function(){//更新数据
+	this.updateOrder();
+	this.updateGongxu();
+    this.updateTop8();
+};
+mainCharts.prototype.updateOrder = function(){//订单分布获取数据接口
+    var self = this;
+    $.get(this.urlApi.url_order, function (rs) {
+        if(rs.ret_code==1000){
+            var data = rs.data;
+            var option = {
+                series: [
+                    {data: data.yida},
+                    {data: data.shushi},
+                    {data: data.shangwu},
+                    {data: data.haohua},
+                    {data: data.other}
+                ]
+            }
+            //设置图表实例的配置项以及数据，万能接口，所有参数和数据的修改都可以通过setOption完成，ECharts 会合并新的参数和数据，然后刷新图表
+            self.orderChart.setOption(option);
+        }else{
+            console.log(rs.msg)
+        }
+    })
+};
+mainCharts.prototype.updateTop8 = function(){//订单分布获取数据接口
+    var self = this;
+    $.get(this.urlApi.url_top8, function (rs) {
+        if(rs.ret_code==1000){
+
+            var data = rs.data;
+            console.log(data.data)
+            var option = {
+                series: [
+                    {data: data.data}
+                ]
+            }
+            //设置图表实例的配置项以及数据，万能接口，所有参数和数据的修改都可以通过setOption完成，ECharts 会合并新的参数和数据，然后刷新图表
+            self.fuwuChart.setOption(option);
+        }else{
+            console.log(rs.msg)
+        }
+    })
+};
+mainCharts.prototype.updateGongxu = function(){//实时供需获取数据接口
+	var self = this;
+	$.get(this.urlApi.url_gongxu, function (rs) {
+		if(rs.ret_code==1000){
+			var data = rs.data;
+			var option = {
+				series: [
+				    {data: data.demand},
+				    {data: data.supply}
+			    ]
+			}
+			//设置图表实例的配置项以及数据，万能接口，所有参数和数据的修改都可以通过setOption完成，ECharts 会合并新的参数和数据，然后刷新图表
+			self.gongxuChart.setOption(option);
+		}else{
+			console.log(rs.msg)
+		}
+	})
+};
 

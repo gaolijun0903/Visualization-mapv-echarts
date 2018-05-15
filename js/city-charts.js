@@ -4,7 +4,7 @@ var OrderOption = {
         text: '城市订单分布',
         textStyle: {
         	color:'#0ED7F9',
-        	fontSize:'18'
+        	fontSize:'16'
         }
     },
     legend: {
@@ -87,6 +87,12 @@ var OrderOption = {
             name:'其他',
             type:'line',
             stack: '总量',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top'
+                }
+            },
             areaStyle: {normal: {}},
             data:[]
         }
@@ -99,7 +105,7 @@ var GongxuOption = {
         text: '平台实时供需状态',
         textStyle: {
         	color:'#0ED7F9',
-        	fontSize:'18'
+        	fontSize:'16'
         }
     },
     tooltip: {},
@@ -167,11 +173,11 @@ function CityCharts(cityshort,dom1,dom2){//0--城市英文缩写，2--订单分�
 	this.cityshort = cityshort; //城市英文缩写
 	this.dom1 = document.getElementById(dom1);  //订单分布图表的Dom元素
 	this.dom2 = document.getElementById(dom2);  //供需图表的Dom元素
-	this.urlDomain = 'http://rap2api.taobao.org/app/mock/12662/map';
-	this.urlQuery = '?city='+this.cityshort+'&timestamp='+new Date().getTime();
+	this.urlDomain = 'https://10.0.11.41:9999/visual';
+	this.urlQuery = '/'+this.cityshort+'/'+Utils.timestamp();
 	this.urlApi = {//两个图表数据接口地址
-		url_order : this.urlDomain+'/order_group'+this.urlQuery,
-		url_gongxu : this.urlDomain+'/supply_demand_group'+this.urlQuery
+		url_order : this.urlDomain+'/carDistribution'+this.urlQuery,
+		url_gongxu : this.urlDomain+'/supplyDemandStatus'+this.urlQuery
 	};
 	this.charts = { //定义两个图表对象
 		orderChart:'',

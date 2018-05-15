@@ -1,4 +1,7 @@
 var Utils = {
+	timestamp:function(){
+		return parseInt(new Date().getTime()/1000);
+	},
 	timeArr12:function(){//生成当前时间的前十二个小时的数组，用于图表的时间坐标轴
 		var res = [];
 		var d = new Date().getHours();

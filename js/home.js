@@ -1,36 +1,75 @@
 
 //头部时间的动态显示
 Utils.minuteTimer($('#time-show'));
-
-
 //左侧数据的动态变化效果
-updateLeftDatas();
 function updateLeftDatas(){
+	var tmp = Date.parse( new Date() ).toString();
+  	var timestamp = tmp.substr(0,10);
+	var url = "https://10.0.11.41:9999/visual/bignum/china/"+timestamp
 	var countUpOptions = {
-		useEasing: false, 
+		useEasing: false,  
 		useGrouping: true, 
-		separator: ',', 
-		decimal: '.', 
+		separator: ',' 
 	};
-	var startArr =[1000, 1000, 1000, 1000, 1000, 1000] ;  //虚拟数据
-	var endArr =[1055, 1055, 1055, 1055, 1055, 1055] ;  //虚拟数据
-	//  0--创建订单量, 1--当前服务量, 2--当前里程数, 3--服务时长, 4--需求量, 5--当前运力
-	var countUpIdArr = ['create-order','current-service','current-mileage','service-duration','quantity-demand','current-transport']
 	
-	for(var i=0; i<countUpIdArr.length; i++){
-		var item = endArr[i];
-		var demoName = new CountUp(countUpIdArr[i], startArr[i], endArr[i], 0, 60, countUpOptions);
-		if (!demoName.error) {
-			(function(i){
-				demoName.start(function(){
-					endArr[i] += 200;
-					this.update(endArr[i]);
-				})
-			})(i);
-		} else {
-			console.error(demoName.error);
-		}
-	}
+	var countUpDomArr = $('.data-number'); //左侧六个数据的Dom容器数组
+	var countUpObjArr = []; //用于存放6个countUp对象的数组
+//	setInterval(function(){
+//		getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr);
+//	},3000)
+	getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr);
 }
+//左侧6个数的，请求接口
+function getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr){
+	$.ajax({
+		type:"get",
+		url:url,
+		async:true,
+		success:function(res){
+			if(res.ret_code==1000){
+                $('.left-container').fadeIn(100);
+				var startArr = res.data.before;
+				var endArr = res.data.current;
+				if(countUpObjArr.length==0){//第一次,需创建CountUp对象
+					$.each(countUpDomArr,function(idx,val,arr){
+						var countUpObj = new CountUp(val.id, startArr[idx], endArr[idx], 0, 4, countUpOptions);
+						if (!countUpObj.error) {
+							countUpObjArr.push(countUpObj);
+						} else {
+							console.error(countUpObj.error);
+						}
+					})
+				}else if(countUpObjArr.length==6){//后续定时更新数据
+					$.each(countUpDomArr,function(idx,val,arr){
+						countUpObjArr[idx].update(endArr[idx])
+					})
+				}else{
+					console.log('创建CountUp对象异常');
+				}
+			}else{
+				console.log(res.ret_code)
+			}
+		},
+		error:function(err){
+			console.log(err)	
+		}
+	});
+}
+var mainCharts = new mainCharts("china","yunli","gongxu","fuwu");
+mainCharts.init();
 
 
+var _time = 0;
+function exec(){
+    window.clearTimeout(_time);
+    setMapData();
+    updateLeftDatas();
+    mainCharts.updateData();
+    _time=window.setTimeout(exec,60000);
+}
+exec();
+mainCharts.fuwuChart.on('click', function (params) {
+    console.log(params.dataIndex)
+    var cityshort = cityRankArr[params.dataIndex]['short'] ;
+    window.location.href = './city.html?cityshort='+cityshort;
+});

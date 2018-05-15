@@ -145,41 +145,46 @@ map.setMapStyle({
         }
     }]
 });
-
+ var options = {
+     fillStyle: 'rgba(255, 250, 50, 0.6)',
+     //shadowColor: 'rgba(255, 250, 50, 0.5)',
+     //shadowBlur: 3,
+     updateCallback: function (time) {
+         time = time.toFixed(2);
+         $('#time').html('时间' + time);
+     },
+     size: 3,
+     draw: 'simple',
+     animation: {
+         type: 'time',
+         stepsRange: {
+             start: 0,
+             end: 10
+         },
+         trails: 1,
+         duration: 6,
+     }
+ }
 var data = [];
+var dataSet = new mapv.DataSet(data);
+var mapvLayer = new mapv.baiduMapLayer(map, dataSet, options);
 
-$.get('static/china-point.json', function (rs) {
-    for (var i = 0; i < rs[0].length; i++) {
-        var geoCoord = rs[0][i].geoCoord;
-        data.push({
-            geometry: {
-                type: 'Point',
-                coordinates: geoCoord 
-            },
-            time: Math.random() * 10
-        });
-    }
+function setMapData(){
+	var tmp = Date.parse( new Date() ).toString();
+  	var timestamp = tmp.substr(0,10);
+	$.get('https://10.0.11.41:9999/visual/starChart/china/'+timestamp, function (rs) {
+	    var _length = rs.data.length;
+	    for (var i = 0; i < _length; i++) {
+	        var geoCoord = rs.data[i].geometry;
+	        data.push({
+	            geometry: geoCoord,
+	            time: Math.random() * 10
+	        });
+	    }
+        console.log(rs)
+        mapvLayer.dataSet.set(data);
 
-    var dataSet = new mapv.DataSet(data);
-    var options = {
-        fillStyle: 'rgba(255, 250, 50, 0.6)',
-        //shadowColor: 'rgba(255, 250, 50, 0.5)',
-        //shadowBlur: 3,
-        updateCallback: function (time) {
-            time = time.toFixed(2);
-            $('#time').html('时间' + time);
-        },
-        size: 3,
-        draw: 'simple',
-        animation: {
-            type: 'time',
-            stepsRange: {
-                start: 0,
-                end: 10
-            },
-            trails: 1,
-            duration: 6,
-        }
-    }
-    var mapvLayer = new mapv.baiduMapLayer(map, dataSet, options);
 });
+}
+
+	
