@@ -1,7 +1,7 @@
 // 指定图表的配置项和数据
 var OrderOption = {
     title: {
-        text: '城市订单分布',
+        text: '订单分布',
         textStyle: {
         	color:'#0ED7F9',
         	fontSize:'16'
@@ -18,6 +18,9 @@ var OrderOption = {
         	fontSize:'14'
         },
         data:['易达','舒适','商务','豪华','其他']
+    },
+    tooltip: {
+        trigger: 'axis'
     },
     grid: {
         left: '3%',
@@ -50,13 +53,22 @@ var OrderOption = {
 	        },
 	        axisLabel:{
         		color: '#99E1FF',
-        		formatter: '{value} K'
-	        }
+        		formatter: function (value, index) {
+                    return value / 1000 + "K";
+                }
+	        },
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    color: 'rgba(80 105 120)'
+                }
+            }
         }
     ],
     series : [   
         {
             name:'易达',
+            showSymbol:false,
             type:'line',
             stack: '总量',
             areaStyle: {normal: {}},
@@ -64,6 +76,7 @@ var OrderOption = {
         },
         {
             name:'舒适',
+            showSymbol:false,
             type:'line',
             stack: '总量',
             areaStyle: {normal: {}},
@@ -71,6 +84,7 @@ var OrderOption = {
         },
         {
             name:'商务',
+            showSymbol:false,
             type:'line',
             stack: '总量',
             areaStyle: {normal: {}},
@@ -78,6 +92,7 @@ var OrderOption = {
         },
         {
             name:'豪华',
+            showSymbol:false,
             type:'line',
             stack: '总量',
             areaStyle: {normal: {}},
@@ -85,14 +100,9 @@ var OrderOption = {
         },
         {
             name:'其他',
+            showSymbol:false,
             type:'line',
             stack: '总量',
-            label: {
-                normal: {
-                    show: true,
-                    position: 'top'
-                }
-            },
             areaStyle: {normal: {}},
             data:[]
         }
@@ -102,7 +112,7 @@ var OrderOption = {
 
 var GongxuOption = {
     title: {
-        text: '平台实时供需状态',
+        text: '实时供需状态',
         textStyle: {
         	color:'#0ED7F9',
         	fontSize:'16'
@@ -111,7 +121,7 @@ var GongxuOption = {
     tooltip: {},
     legend: {
         width:145,
-    		x:'right',
+    	x:'right',
         y:'top',
         itemWidth:14,
         itemHeight:10,
@@ -148,21 +158,45 @@ var GongxuOption = {
         },
         axisLabel:{
     		color: '#99E1FF',
-    		formatter: '{value} K'
+    		formatter: function (value,index) {
+                return value/1000+"K";
+            }
+        },
+        splitLine: {
+            show: true,
+            lineStyle:{
+                color:'rgba(80 105 120)'
+            }
         }
     },
     series: [
 	    {
     		name: '需求',
+            showSymbol:false,
 	        data: [],
 	        type: 'line',
-	        smooth: true
+	        smooth: true,
+            itemStyle : {
+                normal : {
+                    lineStyle:{
+                        width:3,//折线宽度
+                    }
+                }
+            }
 	    },
 	    {
     		name: '运力',
+            showSymbol:false,
 	        data: [],
 	        type: 'line',
-	        smooth: true
+	        smooth: true,
+            itemStyle : {
+                normal : {
+                    lineStyle:{
+                        width:3,//折线宽度
+                    }
+                }
+            }
 	    }
     ],
     color:['#EE4A6E','#56A1D5']
@@ -173,8 +207,8 @@ function CityCharts(cityshort,dom1,dom2){//0--城市英文缩写，2--订单分�
 	this.cityshort = cityshort; //城市英文缩写
 	this.dom1 = document.getElementById(dom1);  //订单分布图表的Dom元素
 	this.dom2 = document.getElementById(dom2);  //供需图表的Dom元素
-	this.urlDomain = 'https://10.0.11.41:9999/visual';
-	this.urlQuery = '/'+this.cityshort+'/'+Utils.timestamp();
+	this.urlDomain = Utils.urlDomain+'/visual';
+	this.urlQuery = '/'+this.cityshort+'/';
 	this.urlApi = {//两个图表数据接口地址
 		url_order : this.urlDomain+'/carDistribution'+this.urlQuery,
 		url_gongxu : this.urlDomain+'/supplyDemandStatus'+this.urlQuery
@@ -204,10 +238,13 @@ CityCharts.prototype.updateData = function(){//更新数据
 };
 CityCharts.prototype.updateOrder = function(){//订单分布获取数据接口
 	var self = this;
-	$.get(this.urlApi.url_order, function (rs) {
+	$.get(this.urlApi.url_order+Utils.timestamp(), function (rs) {
 		if(rs.ret_code==1000){
 			var data = rs.data;
 			var option = {
+            	xAxis:{
+            		data: Utils.timeArr12()
+            	},
 				series: [
 				    {data: data.yida},
 			        {data: data.shushi},
@@ -225,13 +262,16 @@ CityCharts.prototype.updateOrder = function(){//订单分布获取数据接口
 };
 CityCharts.prototype.updateGongxu = function(){//实时供需获取数据接口
 	var self = this;
-	$.get(this.urlApi.url_gongxu, function (rs) {
+	$.get(this.urlApi.url_gongxu+Utils.timestamp(), function (rs) {
 		if(rs.ret_code==1000){
 			var data = rs.data;
 			var option = {
+            	xAxis:{
+            		data: Utils.timeArr12()
+            	},
 				series: [
-				    {data: data.demand_current},
-				    {data: data.supply_current}
+				    {data: data.demand},
+				    {data: data.supply}
 			    ]
 			}
 			//设置图表实例的配置项以及数据，万能接口，所有参数和数据的修改都可以通过setOption完成，ECharts 会合并新的参数和数据，然后刷新图表

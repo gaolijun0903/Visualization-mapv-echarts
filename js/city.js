@@ -6,7 +6,7 @@ var cityInfo = {  //简码与坐标对应关系
 	'gz':{lng:113.2708136740,lat:23.1351666766,name:'广州'},
 	'sz':{lng:114.0661345267,lat:22.5485544122,name:'深圳'},
 	'wz':{lng:120.7058617854,lat:28.0011792279,name:'温州'},
-	'fj':{lng:119.3030722518,lat:26.1059198357,name:'福建'},
+	'fz':{lng:119.3030722518,lat:26.1059198357,name:'福州'},
 	'hrb':{lng:126.5424184340,lat:45.8077839548,name:'哈尔滨'},
 	'zz':{lng:113.6313915479,lat:34.7533581487,name:'郑州'}
 }
@@ -14,7 +14,7 @@ var cityInfo = {  //简码与坐标对应关系
 var citylng = cityInfo[cityshort].lng; //获取城市经度
 var citylat = cityInfo[cityshort].lat; //获取城市纬度
 var cityname = cityInfo[cityshort].name; //获取城市纬度
-//console.log(cityshort,citylng,citylat,cityname);
+
 //修改城市名称
 $('.header-text').text(cityname+'实时数据'); 
 //初始化地图及图层
@@ -45,66 +45,65 @@ $('.tab-item').click(function(p){
 	} 
 })
 
-
-//setInterval(setDataFn, 3000)
-function setDataFn(){  //定时刷新数据
-	cityMaps.updateLayerData();
-	cityCharts.updateData();
-}
-
-
-//头部时间的动态显示
-//Utils.minuteTimer($('#time-show'));
 //左侧数据的动态变化效果
-updateLeftDatas(cityshort);
-function updateLeftDatas(cityshort){
-	
-	var countUpOptions = {
+var LeftDatas = function(){
+	this.countUpDomArr = $('.data-number'); //左侧六个数据的Dom容器数组
+	this.countUpObjArr = []; //用于存放6个countUp对象的数组
+	this.countUpOptions = {
 		useEasing: false, 
 		useGrouping: true, 
 		separator: ',' 
 	};
+	this.url = Utils.urlDomain+"/visual/bignum/"+ cityshort +"/";
 	
-	var countUpDomArr = $('.data-number'); //左侧六个数据的Dom容器数组
-	var countUpObjArr = []; //用于存放6个countUp对象的数组
-		var url = "https://10.0.11.41:9999/visual/bignum/"+ cityshort +"/"+Utils.timestamp();
-		getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr);
-	},3000)
-	getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr);
 }
-//左侧6个数的，请求接口
-function getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr){
-	$.ajax({
-		type:"get",
-		url:url,
-		async:true,
-		success:function(res){
-			if(res.ret_code==1000){
-				$('.left-container').fadeIn(100);
-				var startArr = res.data.before;
-				var endArr = res.data.current;
-				if(countUpObjArr.length==0){//第一次,需创建CountUp对象
-					$.each(countUpDomArr,function(idx,val,arr){
-						var countUpObj = new CountUp(val.id, startArr[idx], endArr[idx], 0, 4, countUpOptions);
-						if (!countUpObj.error) {
-							countUpObjArr.push(countUpObj);
-						} else {
-							console.error(countUpObj.error);
-						}
-					})
-				}else if(countUpObjArr.length==6){//后续定时更新数据
-					$.each(countUpDomArr,function(idx,val,arr){
-						countUpObjArr[idx].update(endArr[idx])
-					})
-				}else{
-					console.log('创建CountUp对象异常');
-				}
+LeftDatas.prototype.init = function(){
+	this.getSixNums();
+}
+LeftDatas.prototype.getSixNums = function(){
+	var self = this;
+	$.get(this.url + Utils.timestamp(), function (res) {
+	    if(res.ret_code==1000){
+			$('.left-container').fadeIn(100);
+			var startArr = res.data.before;
+			var endArr = res.data.current;
+			if(self.countUpObjArr.length==0){//第一次,需创建CountUp对象
+				console.log('init')
+				$.each(self.countUpDomArr,function(idx,val){
+					var countUpObj = new CountUp(val.id, startArr[idx], endArr[idx], 0, 60, self.countUpOptions);
+					if (!countUpObj.error) {
+						countUpObj.start();
+						self.countUpObjArr.push(countUpObj);
+					} else {
+						console.error(countUpObj.error);
+					}
+				})
+			}else if(self.countUpObjArr.length==6){//后续定时更新数据
+				console.log('update')
+				$.each(self.countUpDomArr,function(idx,val){
+					self.countUpObjArr[idx].update(endArr[idx])
+				})
 			}else{
-				console.log(res.ret_code)
+				console.log('创建CountUp对象异常');
 			}
-		},
-		error:function(err){
-			console.log(err)	
+		}else{
+			console.log(res.ret_code)
 		}
 	});
 }
+
+var leftData = new LeftDatas();
+leftData.init();//左侧数据初始化
+
+//头部时间的动态显示
+Utils.minuteTimer($('#time-show'));
+
+setInterval(setDataFn, 60000)
+function setDataFn(){  //定时刷新数据
+	cityMaps.updateLayerData();
+	leftData.getSixNums();
+	//var currentMin = new Date().getMinutes();
+	//console.log(currentMin)
+	cityCharts.updateData();
+}
+

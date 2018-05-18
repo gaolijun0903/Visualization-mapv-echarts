@@ -1,15 +1,17 @@
-
 // 指定图表的配置项和数据
 var YunliOption = {
     title: {
-        text: '城市订单分布',
+        text: '订单分布',
         textStyle: {
         	color:'#0ED7F9',
         	fontSize:'16'
         }
     },
+    tooltip: {
+        trigger: 'axis'
+    },
     legend: {
-		width:185,
+		width:165,
 		x:'right',
         y:'top',
         itemWidth:14,
@@ -43,21 +45,30 @@ var YunliOption = {
     ],
     yAxis : [
         {
-            type : 'value',
-	        axisLine: {
-	            lineStyle: {
-	                color: 'rgba(255,255,255,0.50)'
-	            }
-	        },
-	        axisLabel:{
-        		color: '#99E1FF',
-        		formatter: '{value} K'
-	        }
+            type: 'value',
+            axisLine: {
+                lineStyle: {
+                    color: 'rgba(255,255,255,0.50)'
+                }
+            },
+            axisLabel: {
+                color: '#99E1FF',
+                formatter: function (value, index) {
+                    return value / 1000 + "K";
+                }
+            },
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    color: 'rgba(80 105 120)'
+                }
+            }
         }
     ],
     series : [   
         {
             name:'易达',
+            showSymbol: false,
             type:'line',
             stack: '总量',
             areaStyle: {normal: {}},
@@ -65,6 +76,7 @@ var YunliOption = {
         },
         {
             name:'舒适',
+            showSymbol:false,
             type:'line',
             stack: '总量',
             areaStyle: {normal: {}},
@@ -72,6 +84,7 @@ var YunliOption = {
         },
         {
             name:'商务',
+            showSymbol:false,
             type:'line',
             stack: '总量',
             areaStyle: {normal: {}},
@@ -79,13 +92,16 @@ var YunliOption = {
         },
         {
             name:'豪华',
+            showSymbol:false,
             type:'line',
+            showSymbol: false,
             stack: '总量',
             areaStyle: {normal: {}},
             data:[]
         },
         {
             name:'其他',
+            showSymbol:false,
             type:'line',
             stack: '总量',
             areaStyle: {normal: {}},
@@ -97,7 +113,7 @@ var YunliOption = {
 
 var FuwuOption = {
     title: {
-        text: '平台服务Top8城市',
+        text: '服务Top8城市',
         textStyle: {
         	color:'#0ED7F9',
         	fontSize:'16'
@@ -118,17 +134,21 @@ var FuwuOption = {
     },
     xAxis: {
         type: 'value',
-        //name:'K',
         axisLine: {//坐标轴轴线相关设置。
             lineStyle: {
                 color: 'rgba(255,255,255,0.50)'
             }
         },
         axisLabel:{//坐标轴刻度标签的相关设置。
-        		color: '#99E1FF',
-        		formatter: '{value} K'
+    		color: '#99E1FF',
+    		formatter: function (value,index) {
+                return value/1000+"K";
+            }
         },
-        boundaryGap: [0, 0.01]
+        boundaryGap: [0, 0.01],
+        splitLine: {
+            show: false,
+        }
     },
     yAxis: {
         type: 'category',
@@ -137,10 +157,10 @@ var FuwuOption = {
                 color: 'rgba(255,255,255,0.50)'
             }
         },
-        axisLabel:{
-        		color: '#99E1FF'
+        axisLabel: {
+            color: '#99E1FF'
         },
-        data: ['郑州','哈尔滨','福建','温州','深圳','广州','上海','北京']
+        data: ['郑州', '哈尔滨', '福州', '温州', '深圳', '广州', '上海', '北京'],
     },
     series: [
         {
@@ -155,11 +175,9 @@ var FuwuOption = {
     ]
 };
 
-
-
 var GongxuOption = {
     title: {
-        text: '平台实时供需状态',
+        text: '实时供需状态',
         textStyle: {
         	color:'#0ED7F9',
         	fontSize:'16'
@@ -168,7 +186,7 @@ var GongxuOption = {
     tooltip: {},
     legend: {
         width:145,
-    		x:'right',
+    	x:'right',
         y:'top',
         itemWidth:14,
         itemHeight:10,
@@ -180,6 +198,7 @@ var GongxuOption = {
     },
     grid: {
         left: '3%',
+        top:'20%',
         right: '4%',
         bottom: '3%',
         containLabel: true
@@ -205,21 +224,45 @@ var GongxuOption = {
         },
         axisLabel:{
     		color: '#99E1FF',
-    		formatter: '{value} K'
+            formatter: function (value,index) {
+                return value/1000+"K";
+            }
+        },
+        splitLine: {
+            show: true,
+            lineStyle:{
+                color:'rgba(80 105 120)'
+            }
         }
     },
     series: [
 	    {
     		name: '需求',
+            showSymbol:false,
 	        data: [],
 	        type: 'line',
-	        smooth: true
+	        smooth: true,
+            itemStyle : {
+                normal : {
+                    lineStyle:{
+                        width:3,//折线宽度
+                    }
+                }
+            }
 	    },
 	    {
     		name: '运力',
+            showSymbol:false,
 	        data: [],
 	        type: 'line',
-	        smooth: true
+	        smooth: true,
+            itemStyle : {
+                normal : {
+                    lineStyle:{
+                        width:3,//折线宽度
+                    }
+                }
+            }
 	    }
     ],
     color:['#EE4A6E','#56A1D5']
@@ -228,7 +271,7 @@ var GongxuOption = {
 var cityRankArr = [
 	{id:8,name:'郑州',short:'zz',lng:113.6313915479,lat:34.7533581487},
 	{id:7,name:'哈尔滨',short:'hrb',lng:126.5424184340,lat:45.8077839548},
-	{id:6,name:'福建',short:'fj',lng:119.3030722518,lat:26.1059198357},
+	{id:6,name:'福州',short:'fz',lng:119.3030722518,lat:26.1059198357},
 	{id:5,name:'温州',short:'wz',lng:120.7058617854,lat:28.0011792279},
 	{id:4,name:'深圳',short:'sz',lng:114.0661345267,lat:22.5485544122},
 	{id:3,name:'广州',short:'gz',lng:113.2708136740,lat:23.1351666766},
@@ -242,11 +285,11 @@ function mainCharts(cityshort,dom1,dom2,dom3){//0--城市英文缩写，2--订�
 	this.dom1 = document.getElementById(dom1);  //订单分布图表的Dom元素
 	this.dom2 = document.getElementById(dom2);  //供需图表的Dom元素
     this.dom3 = document.getElementById(dom3);
-    this.urlDomain = 'https://10.0.11.41:9999/visual';
-	this.urlQuery = this.cityshort+'/'+Date.parse( new Date() ).toString().substr(0,10);
+    this.urlDomain = Utils.urlDomain+'/visual';
+	this.urlQuery = this.cityshort+'/';
 	this.urlApi = {//两个图表数据接口地址
 		url_order : this.urlDomain+'/carDistribution/'+this.urlQuery,
-        url_top8 : this.urlDomain+'/topNOrderByCity/'+Date.parse( new Date() ).toString().substr(0,10),
+        url_top8 : this.urlDomain+'/topNOrderByCity/',
 		url_gongxu : this.urlDomain+'/supplyDemandStatus/'+this.urlQuery
 	};
 	this.orderChart={};
@@ -260,7 +303,6 @@ function mainCharts(cityshort,dom1,dom2,dom3){//0--城市英文缩写，2--订�
 	};
 }
 mainCharts.prototype.init = function(){// 基于准备好的dom，初始化echarts实例
-
 	this.orderChart = echarts.init(this.dom1);
     this.gongxuChart = echarts.init(this.dom2);
     this.fuwuChart = echarts.init(this.dom3);
@@ -278,10 +320,13 @@ mainCharts.prototype.updateData = function(){//更新数据
 };
 mainCharts.prototype.updateOrder = function(){//订单分布获取数据接口
     var self = this;
-    $.get(this.urlApi.url_order, function (rs) {
+    $.get(this.urlApi.url_order+Date.parse( new Date() ).toString().substr(0,10), function (rs) {
         if(rs.ret_code==1000){
             var data = rs.data;
             var option = {
+            	xAxis:{
+            		data: Utils.timeArr12()
+            	},
                 series: [
                     {data: data.yida},
                     {data: data.shushi},
@@ -299,11 +344,9 @@ mainCharts.prototype.updateOrder = function(){//订单分布获取数据接口
 };
 mainCharts.prototype.updateTop8 = function(){//订单分布获取数据接口
     var self = this;
-    $.get(this.urlApi.url_top8, function (rs) {
+    $.get(this.urlApi.url_top8+Date.parse( new Date() ).toString().substr(0,10), function (rs) {
         if(rs.ret_code==1000){
-
             var data = rs.data;
-            console.log(data.data)
             var option = {
                 series: [
                     {data: data.data}
@@ -318,10 +361,13 @@ mainCharts.prototype.updateTop8 = function(){//订单分布获取数据接口
 };
 mainCharts.prototype.updateGongxu = function(){//实时供需获取数据接口
 	var self = this;
-	$.get(this.urlApi.url_gongxu, function (rs) {
+	$.get(this.urlApi.url_gongxu+Date.parse( new Date() ).toString().substr(0,10), function (rs) {
 		if(rs.ret_code==1000){
 			var data = rs.data;
 			var option = {
+            	xAxis:{
+            		data: Utils.timeArr12()
+            	},
 				series: [
 				    {data: data.demand},
 				    {data: data.supply}

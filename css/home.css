@@ -78,7 +78,7 @@
 }
 .left-container .data-list-group .data-list{
 	flex:1;
-	margin-bottom: 0.2rem;
+	margin-bottom: 0.3rem;
 	display: flex;
 	flex-direction:column;
 }

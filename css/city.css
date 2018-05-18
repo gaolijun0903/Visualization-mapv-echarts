@@ -31,6 +31,9 @@
 	background-image: url(../img/back1.png);
 	background-size:100% 100%;
 }
+.header-container .header-left-container .back-png:hover{
+	opacity: 0.7;
+}
 .header-container .header-left-container .header-text{
 	flex: 1;
 	font-size: 0.3rem;
@@ -173,7 +176,7 @@
 }
 .right-container .echart-box .tab-list .tab-item{
 	flex: 1;
-	font-size: 0.16rem;
+	font-size: 0.14rem;
 	text-align: center;
 	color: #0FD9F8;
 	letter-spacing: 0;
@@ -182,7 +185,6 @@
 .right-container .echart-box .tab-list.disable .tab-item{
 	color: #ccc;
 	cursor:	wait;
-	/*cursor:not-allowed;*/
 }
 .right-container .echart-box .tab-list .tab-item .tab-item-inner{
 	display: inline-block;
@@ -191,9 +193,16 @@
 	margin: 0 auto;
 	border-bottom: 0.04rem solid transparent;
 }
+.right-container .echart-box .tab-list .tab-item .tab-item-inner:hover{
+	font-size: 0.16rem;
+	font-weight: 600;
+}
+
 .right-container .echart-box .tab-list .tab-item.tab-item-active .tab-item-inner{
 	border-bottom: 0.04rem solid #FFFFFF;
 	color: #FFFFFF;
+	font-size: 0.16rem;
+	font-weight: 600;
 }
 .right-container .echart-box .subtab-list {
 	padding: 0 0.4rem;

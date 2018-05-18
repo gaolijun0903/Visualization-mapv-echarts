@@ -5,7 +5,7 @@ Utils.minuteTimer($('#time-show'));
 function updateLeftDatas(){
 	var tmp = Date.parse( new Date() ).toString();
   	var timestamp = tmp.substr(0,10);
-	var url = "https://10.0.11.41:9999/visual/bignum/china/"+timestamp
+	var url = Utils.urlDomain+"/visual/bignum/china/"+timestamp
 	var countUpOptions = {
 		useEasing: false,  
 		useGrouping: true, 
@@ -14,9 +14,6 @@ function updateLeftDatas(){
 	
 	var countUpDomArr = $('.data-number'); //左侧六个数据的Dom容器数组
 	var countUpObjArr = []; //用于存放6个countUp对象的数组
-//	setInterval(function(){
-//		getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr);
-//	},3000)
 	getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr);
 }
 //左侧6个数的，请求接口
@@ -32,8 +29,9 @@ function getSixNums(url,countUpDomArr, countUpOptions,countUpObjArr){
 				var endArr = res.data.current;
 				if(countUpObjArr.length==0){//第一次,需创建CountUp对象
 					$.each(countUpDomArr,function(idx,val,arr){
-						var countUpObj = new CountUp(val.id, startArr[idx], endArr[idx], 0, 4, countUpOptions);
+						var countUpObj = new CountUp(val.id, startArr[idx], endArr[idx], 0, 60, countUpOptions);
 						if (!countUpObj.error) {
+                            countUpObj.start();
 							countUpObjArr.push(countUpObj);
 						} else {
 							console.error(countUpObj.error);
