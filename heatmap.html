@@ -55,7 +55,7 @@
                     coordinates: [cityCenter.lng - 2 + Math.random() * 4, cityCenter.lat - 2 + Math.random() * 4]
                 },
                 count: 30 * Math.random(),
-                time: 10 * Math.random()
+                time: 50 * Math.random()
             });
         }
  
@@ -69,10 +69,10 @@
                 type: 'time',
                 stepsRange: {
                     start: 0,
-                    end: 10
+                    end: 50
                 },
-                trails: 1,
-                duration: 5,
+                trails: 5,
+                duration: 50,
             },
             draw: 'heatmap'
         }
