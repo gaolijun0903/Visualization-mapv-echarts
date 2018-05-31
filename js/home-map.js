@@ -43,10 +43,10 @@ var options = {
         type: 'time',
         stepsRange: {
             start: 0,
-            end: 10
+            end: 5
         },
         trails: 1,
-        duration: 6,
+        duration: 60,
      }
  }
 var data = [];

@@ -1,5 +1,7 @@
 var Utils = {
-	urlDomain:'https://',  //线下测试接口域名
+	urlDomain:'https://10.0.11.41:9999',  //线下测试接口域名
+	//urlDomain：'https://172.17.1.58',
+	//urlDomain:'https://datav-api.yongche.com', //线上接口域名
 	timestamp:function(){
 		return Date.parse(new Date())/1000;
 	},

@@ -50,7 +50,7 @@ var LeftDatas = function(){
 	this.countUpDomArr = $('.data-number'); //左侧六个数据的Dom容器数组
 	this.countUpObjArr = []; //用于存放6个countUp对象的数组
 	this.countUpOptions = {
-		useEasing: false, 
+		useEasing: true, 
 		useGrouping: true, 
 		separator: ',' 
 	};

@@ -68,6 +68,8 @@ function exec(){
 exec();
 mainCharts.fuwuChart.on('click', function (params) {
     console.log(params.dataIndex)
-    var cityshort = cityRankArr[params.dataIndex]['short'] ;
+    var city = JSON.parse(localStorage.getItem("city"));
+    var cityshort = city[params.dataIndex];
+    console.log(city)
     window.location.href = './city.html?cityshort='+cityshort;
 });

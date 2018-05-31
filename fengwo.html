@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title></title>
-
     <style type="text/css">
         html,
         body {
@@ -65,7 +63,7 @@
         var options = {
             fillStyle: 'rgba(55, 50, 250, 0.8)',
             shadowColor: 'rgba(255, 250, 50, 1)',
-            shadowBlur: 20,
+//          shadowBlur: 20,
             max: 100,
             size: 30,
             label: {
@@ -78,15 +76,15 @@
             globalAlpha: 0.5,
             gradient: { 0.25: "rgb(0,0,255)", 0.75: "rgb(0,255,0)", 0.95: "yellow", 1.0: "rgb(255,0,0)"},
             draw: 'honeycomb',
-//          animation: {
-//		        type: 'time', // 按时间展示动画
-//		        stepsRange: { // 动画时间范围,time字段中值
-//		            start: 0,
-//		            end: 50
-//		        },
-//		        trails: 5, // 时间动画的拖尾大小
-//		        duration: 50, // 单个动画的时间，单位秒
-//		    }
+            animation: {
+		        type: 'time', // 按时间展示动画
+		        stepsRange: { // 动画时间范围,time字段中值
+		            start: 0,
+		            end: 40
+		        },
+		        trails: 1, // 时间动画的拖尾大小
+		        duration: 40, // 单个动画的时间，单位秒
+		    }
         }
 
         var mapvLayer = new mapv.baiduMapLayer(map, dataSet, options);

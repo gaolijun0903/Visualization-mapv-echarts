@@ -8,10 +8,22 @@ var YunliOption = {
         }
     },
     tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
+        formatter:function(data){
+            var total = 0;
+            data.forEach(function(item,idx){
+                total+=item.value;
+            })
+            var tipStr='';
+            data.forEach(function(item,idx){
+                var per = ( item.value/total*100).toFixed(2)+"%";
+                tipStr += item.seriesName+': '+ per +'<br />';
+            })
+            return tipStr;
+        }
     },
     legend: {
-		width:165,
+		width:185,
 		x:'right',
         y:'top',
         itemWidth:14,
@@ -71,6 +83,7 @@ var YunliOption = {
             showSymbol: false,
             type:'line',
             stack: '总量',
+            symbol :'circle',
             areaStyle: {normal: {}},
             data:[]
         },
@@ -79,6 +92,7 @@ var YunliOption = {
             showSymbol:false,
             type:'line',
             stack: '总量',
+            symbol :'circle',
             areaStyle: {normal: {}},
             data:[]
         },
@@ -87,6 +101,7 @@ var YunliOption = {
             showSymbol:false,
             type:'line',
             stack: '总量',
+            symbol :'circle',
             areaStyle: {normal: {}},
             data:[]
         },
@@ -96,6 +111,7 @@ var YunliOption = {
             type:'line',
             showSymbol: false,
             stack: '总量',
+            symbol :'circle',
             areaStyle: {normal: {}},
             data:[]
         },
@@ -104,6 +120,7 @@ var YunliOption = {
             showSymbol:false,
             type:'line',
             stack: '总量',
+            symbol :'circle',
             areaStyle: {normal: {}},
             data:[]
         }
@@ -160,7 +177,7 @@ var FuwuOption = {
         axisLabel: {
             color: '#99E1FF'
         },
-        data: ['郑州', '哈尔滨', '福州', '温州', '深圳', '广州', '上海', '北京'],
+
     },
     series: [
         {
@@ -242,6 +259,7 @@ var GongxuOption = {
 	        data: [],
 	        type: 'line',
 	        smooth: true,
+            symbol :'circle',
             itemStyle : {
                 normal : {
                     lineStyle:{
@@ -256,6 +274,7 @@ var GongxuOption = {
 	        data: [],
 	        type: 'line',
 	        smooth: true,
+            symbol :'circle',
             itemStyle : {
                 normal : {
                     lineStyle:{
@@ -268,16 +287,7 @@ var GongxuOption = {
     color:['#EE4A6E','#56A1D5']
 };
 
-var cityRankArr = [
-	{id:8,name:'郑州',short:'zz',lng:113.6313915479,lat:34.7533581487},
-	{id:7,name:'哈尔滨',short:'hrb',lng:126.5424184340,lat:45.8077839548},
-	{id:6,name:'福州',short:'fz',lng:119.3030722518,lat:26.1059198357},
-	{id:5,name:'温州',short:'wz',lng:120.7058617854,lat:28.0011792279},
-	{id:4,name:'深圳',short:'sz',lng:114.0661345267,lat:22.5485544122},
-	{id:3,name:'广州',short:'gz',lng:113.2708136740,lat:23.1351666766},
-	{id:2,name:'上海',short:'sh',lng:121.4803295328,lat:31.2363429624},
-	{id:1,name:'北京',short:'bj',lng:116.4136103013,lat:39.9110666857}
-]
+
 
 //图表管理对象
 function mainCharts(cityshort,dom1,dom2,dom3){//0--城市英文缩写，2--订单分布图表的Dom元素的Id，3--供需图表的Dom元素的Id，
@@ -347,10 +357,15 @@ mainCharts.prototype.updateTop8 = function(){//订单分布获取数据接口
     $.get(this.urlApi.url_top8+Date.parse( new Date() ).toString().substr(0,10), function (rs) {
         if(rs.ret_code==1000){
             var data = rs.data;
+            var city=data.city;
+            localStorage.setItem("city",JSON.stringify(city))
             var option = {
                 series: [
                     {data: data.data}
-                ]
+                ],
+                yAxis:[{
+                    data:data.name
+                }]
             }
             //设置图表实例的配置项以及数据，万能接口，所有参数和数据的修改都可以通过setOption完成，ECharts 会合并新的参数和数据，然后刷新图表
             self.fuwuChart.setOption(option);

@@ -20,7 +20,20 @@ var OrderOption = {
         data:['易达','舒适','商务','豪华','其他']
     },
     tooltip: {
-        trigger: 'axis'
+        trigger: 'axis',
+        formatter:function(data){
+        	var total = 0;
+            data.forEach(function(item,idx){
+            	total+=item.value;
+            })
+            var tipStr='';
+            data.forEach(function(item,idx){
+            	var per = ( item.value/total*100).toFixed(2)+"%";
+            	tipStr += item.seriesName+': '+ per +'<br />';
+            })
+            return tipStr;
+        }
+
     },
     grid: {
         left: '3%',
@@ -71,6 +84,7 @@ var OrderOption = {
             showSymbol:false,
             type:'line',
             stack: '总量',
+            symbol :'circle',
             areaStyle: {normal: {}},
             data:[]
         },
@@ -79,6 +93,7 @@ var OrderOption = {
             showSymbol:false,
             type:'line',
             stack: '总量',
+            symbol :'circle',
             areaStyle: {normal: {}},
             data:[]
         },
@@ -87,6 +102,7 @@ var OrderOption = {
             showSymbol:false,
             type:'line',
             stack: '总量',
+            symbol :'circle',
             areaStyle: {normal: {}},
             data:[]
         },
@@ -95,6 +111,7 @@ var OrderOption = {
             showSymbol:false,
             type:'line',
             stack: '总量',
+            symbol :'circle',
             areaStyle: {normal: {}},
             data:[]
         },
@@ -103,6 +120,7 @@ var OrderOption = {
             showSymbol:false,
             type:'line',
             stack: '总量',
+            symbol :'circle',
             areaStyle: {normal: {}},
             data:[]
         }
@@ -175,6 +193,7 @@ var GongxuOption = {
             showSymbol:false,
 	        data: [],
 	        type: 'line',
+            symbol :'circle',
 	        smooth: true,
             itemStyle : {
                 normal : {
@@ -189,6 +208,7 @@ var GongxuOption = {
             showSymbol:false,
 	        data: [],
 	        type: 'line',
+            symbol :'circle',
 	        smooth: true,
             itemStyle : {
                 normal : {

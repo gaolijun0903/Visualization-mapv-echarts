@@ -8,10 +8,10 @@ var MapLayerOptions = {
             type: 'time',// 按时间展示动画
             stepsRange: {// 动画时间范围,time字段中值
                 start: 0,
-                end: 10
+                end: 5
             },
             trails: 1,// 时间动画的拖尾大小
-            duration: 15,// 单个动画的时间，单位秒
+            duration: 60// 单个动画的时间，单位秒
         }
     },
 	'YUNLI1':{
@@ -28,29 +28,35 @@ var MapLayerOptions = {
         animation: {
             stepsRange: {
                 start: 0,
-                end: 5
+                end: 80
             },
-            trails: 1,
+            trails: 3,
             duration: 5,
         },
         draw: 'simple'
-    },
-	'GONGXU':{
-        size: 13, // 每个热力点半径大小
-        globalAlpha: 1, // 透明度
-        gradient: { 0.25: "rgb(0,0,255)", 0.35: "rgb(0,255,0)", 0.75: "yellow", 1.0: "rgb(255,0,0)"},// 热力图渐变色
-        max: 5,  // 最大权重值，根据上面配置用以计算它的热度
-        animation: {
-            type: 'time',// 按时间展示动画
-            stepsRange: {// 动画时间范围,time字段中值
-                start: 0,
-                end: 10
-            },
-            trails: 1,// 时间动画的拖尾大小
-            duration: 25,// 单个动画的时间，单位秒
+   },
+    'GONGXU':{
+        fillStyle: 'rgba(55, 50, 250, 0.8)',
+        shadowColor: 'rgba(255, 250, 50, 1)',
+        max: 30,
+        size: 40,
+        label: {
+            show: true,
+            fillStyle: 'white'
         },
-        draw: 'heatmap'
-    },
+        globalAlpha: 0.01,
+        gradient: { 0.25: "rgb(0 ,135 ,130)", 0.65: "yellow",  0.85: "rgb(255,0,0)"},
+        draw: 'honeycomb',
+        animation: {
+	        type: 'time', // 按时间展示动画
+	        stepsRange: { // 动画时间范围,time字段中值
+	            start: 0,
+	            end: 10
+	        },
+	        trails: 1, // 时间动画的拖尾大小
+	        duration: 10, // 单个动画的时间，单位秒
+	    }
+   	},
 	'LUJING':{
         strokeStyle: 'rgba(50, 50, 255, 0.8)',// 描边颜色
         lineWidth: 1.05,
@@ -124,7 +130,6 @@ CityMaps.prototype.initLayers = function(cb){ //初始化图层，支持参数-�
 	$.when(this.xingyungongxu(), this.yunli(), this.lujing())
 	.then(function(data1, data2, data4){
 	    self.allDataOver = true;  //全部图层的数据都加载完毕
-	    //self.switchLayer('xingyun');  //默认显示星云图显示
 	    if(cb){//如果有回调函数，执行
 	    	cb();
 	    }
@@ -212,6 +217,7 @@ CityMaps.prototype.yunli=function (isUpdate){ //运力图
 	$.get(this.apiUrl.YUNLI+Utils.timestamp(), function (rs) {
 		if(rs.ret_code==1000){
 	    	var _length = rs.data.point.length;
+	    	
 			if(_length==0){
 				console.log('返回数据为空');
 				return
